@@ -10,7 +10,7 @@ const createReview = async(payload:any,userId:string)=>{
 
     const alreadyReviewed = await prisma.review.findUnique({
         where:{
-            id:payload.bookingId
+            bookingId:payload.bookingId
         }
     })
 
