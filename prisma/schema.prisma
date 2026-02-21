@@ -71,6 +71,8 @@ model Booking {
   status    BookingStatus @default(PENDING)
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
+  
+  review Review?
 
   tutorId String
   tutor   TutorProfile @relation("TutorBookings",fields: [tutorId], references: [id])
@@ -88,6 +90,9 @@ model Review {
 
   tutorId String
   tutor   TutorProfile @relation(fields: [tutorId], references: [id])
+
+  bookingId String @unique
+  booking Booking @relation(fields: [bookingId],references: [id])
 
   userId String
   user User @relation(fields: [userId],references: [id])

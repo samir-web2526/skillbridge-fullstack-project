@@ -7,8 +7,23 @@ const createReview = async(payload:any,userId:string)=>{
             id:payload.bookingId
         }
     })
+
+    const alreadyReviewed = await prisma.review.findUnique({
+        where:{
+            id:payload.bookingId
+        }
+    })
+
+    if(alreadyReviewed){
+        throw new Error("You cann't reviewed again because you already reviewed this session")
+    }
+
     if(!existBooking){
         throw new Error("Booking not found")
+    }
+
+    if(existBooking.status !== 'COMPLETED'){
+        throw new Error("You cann't review this tutor because session is not completed")
     }
 
     if(existBooking.userId !== userId || existBooking.tutorId !== payload.tutorId){
