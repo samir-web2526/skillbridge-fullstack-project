@@ -8,26 +8,41 @@ const createBooking = async (payload: any, userId: string) => {
     }
    });
 
-   const existBooking = await prisma.booking.findFirst({
-    where:{
-        userId:userId,
-        tutorId:payload.tutorId
-    }
-   });
+   const activeBookingCount = await prisma.booking.count({
+  where: {
+    userId: userId,
+    tutorId: payload.tutorId,
+    status: {
+      in: ["PENDING", "CONFIRMED"],
+    },
+  },
+});
+
+if (activeBookingCount > 0) {
+  throw new Error("You already have an active booking");
+}
+
+  //  const existBooking = await prisma.booking.findMany({
+  //   where:{
+  //       userId:userId,
+  //       tutorId:payload.tutorId
+  //   }
+  //  });
   
-   if(existBooking && existBooking.status !== 'COMPLETED' && existBooking.status !== "CANCELLED"){
-     let bookingStatusMessage = "";
-     if(existBooking.status === "PENDING"){
-        bookingStatusMessage = "Booking is currently in PENDING stage"
-     }
-     else if(existBooking.status === 'CONFIRMED'){
-        bookingStatusMessage = "Booking is already CONFIRMED"
-     }
-     else{
-        bookingStatusMessage = `Booking is in ${existBooking.status} stage`
-     }
-     throw new Error(bookingStatusMessage)
-   }
+  //  if(existBooking && existBooking.status !== 'COMPLETED' && existBooking.status !== "CANCELLED"){
+  //    let bookingStatusMessage = "";
+  //    if(existBooking.status === "PENDING"){
+  //       bookingStatusMessage = "Booking is currently in PENDING stage"
+  //    }
+  //    else if(existBooking.status === 'CONFIRMED'){
+  //       bookingStatusMessage = "Booking is already CONFIRMED"
+  //    }
+  //    else{
+  //       bookingStatusMessage = `Booking is in ${existBooking.status} stage`
+  //    }
+  //    throw new Error(bookingStatusMessage)
+  //  }
+
    if(!existTutorProfile){
     throw new Error("Tutor profile not exist!!")
    }

@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { tutorService } from "./tutor.service";
 
+import paginationSortHelpers from "../../helpers/paginationSortHelpers";
+
 const createTutor = async (req: Request, res: Response) => {
   try {
     const user = req.user;
@@ -25,7 +27,13 @@ const createTutor = async (req: Request, res: Response) => {
 
 const getTutor = async (req: Request, res: Response) => {
   try {
-    const result = await tutorService.getTutor();
+     const search =
+      typeof req.query.search === "string" ? req.query.search : undefined;
+   
+       const {page,limit,skip,sortBy,sortOrder} = paginationSortHelpers(req.query)
+
+    
+    const result = await tutorService.getTutor({search,page,limit,skip,sortBy,sortOrder});
     res.status(201).json({
       message: "Tutor fetched successfully",
       data: result,

@@ -1,5 +1,7 @@
 
+import { Prisma } from "@prisma/client/extension";
 import { prisma } from "../../lib/prisma";
+import { TutorProfileWhereInput } from "../../../generated/prisma/models";
 
 const createTutor = async (payload: any, userId: string) => {
 
@@ -21,18 +23,125 @@ const createTutor = async (payload: any, userId: string) => {
   return result;
 };
 
-const getTutor = async () => {
-  const result = await prisma.tutorProfile.findMany({});
-  return result;
+const getTutor = async (payload:{
+  search: string | undefined;
+  page:number;
+  limit:number;
+  skip:number;
+  sortBy:string |undefined;
+  sortOrder:string | undefined
+}) => {
+
+  const allAndConditions: TutorProfileWhereInput[] =[];
+  if(payload.search){
+    allAndConditions.push({
+      category:{
+        is:{
+          name:{
+          contains:payload.search,
+          mode:"insensitive"
+        }
+        }
+      }
+    })
+  }
+
+  const tutors = await prisma.tutorProfile.findMany({
+    take:payload.limit,
+    skip:payload.skip,
+    where:{
+      AND:allAndConditions,
+    },
+    orderBy:{createdAt:"desc"},
+    include:{
+      category:true,
+      user:true,
+      _count:{
+        select:{
+          booking:true,
+          review:true,
+        }
+      },
+       review: {
+        select: {
+          rating: true,
+        },
+      },
+    }
+
+  });
+
+ const formattedTutors = tutors.map((tutor)=>{
+  const totalReview = tutor.review.length;
+  const averageRating = totalReview > 0 ?Number((tutor.review.reduce((acc,r)=>acc+ r.rating,0)/totalReview)):0;
+  return{
+    id: tutor.id,
+      bio: tutor.bio,
+      category: tutor.category,
+      user: tutor.user,
+      totalBookings: tutor._count.booking,
+      totalReview,
+      averageRating,
+  }
+ })
+
+ const total = await prisma.tutorProfile.count({
+  where:{
+    AND:allAndConditions
+  }
+ });
+ return {
+  data:formattedTutors,
+  paginations:{
+    total,
+    page:payload.page,
+    limit:payload.limit,
+    totalPage: Math.ceil(total/payload.limit)
+  }
+ }
+ 
 };
 
 const getTutorById = async (tutorId: string) => {
-  const result = await prisma.tutorProfile.findUnique({
+  const tutor = await prisma.tutorProfile.findUnique({
     where: {
       id: tutorId,
     },
+    include:{
+      category:true,
+      user:true,
+      _count:{
+        select:{
+          booking:true,
+          review:true
+        }
+      },
+      review:{
+        select:{
+          rating:true
+        }
+      }
+    }
   });
-  return result;
+
+  if(!tutor){
+    throw new Error("Tutor not found");
+  }
+
+  const totalReview = tutor.review.length;
+  const averageRating = totalReview>0?Number(tutor.review.reduce((acc,r)=>acc + r.rating, 0)/totalReview):0;
+  const formattedTutor = {
+    id: tutor.id,
+    bio: tutor.bio,
+    category: tutor.category,
+    user: tutor.user,
+    totalBookings: tutor._count.booking,
+    totalReview,
+    averageRating: averageRating
+  }
+ 
+  return formattedTutor;
+ 
 };
 
 const updateTutor = async (payload: any, userId: string, tutorId: string) => {
