@@ -22,27 +22,6 @@ if (activeBookingCount > 0) {
   throw new Error("You already have an active booking");
 }
 
-  //  const existBooking = await prisma.booking.findMany({
-  //   where:{
-  //       userId:userId,
-  //       tutorId:payload.tutorId
-  //   }
-  //  });
-  
-  //  if(existBooking && existBooking.status !== 'COMPLETED' && existBooking.status !== "CANCELLED"){
-  //    let bookingStatusMessage = "";
-  //    if(existBooking.status === "PENDING"){
-  //       bookingStatusMessage = "Booking is currently in PENDING stage"
-  //    }
-  //    else if(existBooking.status === 'CONFIRMED'){
-  //       bookingStatusMessage = "Booking is already CONFIRMED"
-  //    }
-  //    else{
-  //       bookingStatusMessage = `Booking is in ${existBooking.status} stage`
-  //    }
-  //    throw new Error(bookingStatusMessage)
-  //  }
-
    if(!existTutorProfile){
     throw new Error("Tutor profile not exist!!")
    }
@@ -58,9 +37,33 @@ if (activeBookingCount > 0) {
   return result;
 };
 
-const getBooking = async () => {
-  const result = await prisma.booking.findMany();
-  return result;
+const getBooking = async (userId:string,role:"STUDENT" | "TUTOR" | "ADMIN") => {
+  if(role === "STUDENT"){
+    return await prisma.booking.findMany({
+      where:{
+        userId:userId
+      },
+      include:{tutor:true}
+    })
+  }
+  if(role==="TUTOR"){
+    const tutorProfile = await prisma.tutorProfile.findUnique({
+      where:{
+        userId:userId
+      }
+    });
+
+    if(!tutorProfile){
+      throw new Error("Tutor profile not found so no booking here")
+    }
+    return await prisma.booking.findMany({
+      where:{
+        tutorId:tutorProfile.id
+      },
+      include:{user:true}
+    })
+  }
+   throw new Error("Invalid role provided");
 };
 
 const getBookingById = async (bookingId: string) => {

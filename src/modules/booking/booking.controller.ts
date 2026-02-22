@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { bookingService } from "./booking.service";
+import { userRole } from "../../middlewares/auth";
 
 const createBooking = async (req: Request, res: Response) => {
   try {
@@ -27,7 +28,9 @@ const createBooking = async (req: Request, res: Response) => {
 
 const getBooking = async (req: Request, res: Response) => {
   try {
-    const result = await bookingService.getBooking();
+    const user = req.user;
+    console.log(user);
+    const result = await bookingService.getBooking(user?.id as string,user?.role as userRole);
     res.status(201).json({
       message: "Booking fetched successfully",
       data: result,

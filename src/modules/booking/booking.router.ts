@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { bookingController } from "./booking.controller";
-import auth from "../../middlewares/auth";
-import { Role } from "../../../generated/prisma/enums";
+import auth, { userRole } from "../../middlewares/auth";
+
 
 const router = Router()
-router.post("/",auth(Role.STUDENT),bookingController.createBooking);
-router.get("/",bookingController.getBooking);
+router.post("/",auth(userRole.STUDENT),bookingController.createBooking);
+router.get("/",auth(userRole.STUDENT,userRole.TUTOR),bookingController.getBooking);
 router.get("/:bookingId",bookingController.getBookingById);
-router.patch("/:bookingId",auth(Role.TUTOR),bookingController.updateBooking);
+router.patch("/:bookingId",auth(userRole.TUTOR),bookingController.updateBooking);
 
 export const bookingRouter = router;
