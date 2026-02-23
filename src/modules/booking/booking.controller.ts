@@ -45,9 +45,11 @@ const getBooking = async (req: Request, res: Response) => {
 
 const getBookingById = async (req: Request, res: Response) => {
   try {
+
+    const user = req.user;
     const bookingId = req.params.bookingId;
 
-    const result = await bookingService.getBookingById(bookingId as string);
+    const result = await bookingService.getBookingById(user?.id as string,bookingId as string,user?.role as userRole);
     res.status(201).json({
       message: "Booking Fetched successfully by id",
       data: result,
@@ -59,6 +61,23 @@ const getBookingById = async (req: Request, res: Response) => {
     });
   }
 };
+
+const cancelBooking = async(req: Request, res: Response)=>{
+  try {
+    const user = req.user;
+    const bookingId = req.params.bookingId;
+    const result = await bookingService.cancelBooking(req.body,user?.id as string,bookingId as string);
+    res.status(201).json({
+      message: "Booking cancelled successfully",
+      data: result,
+    });
+  } catch (error:any) {
+     res.status(404).json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
+  }
+}
 
 const updateBooking = async (req: Request, res: Response) => {
   try {
@@ -87,4 +106,5 @@ export const bookingController = {
   getBooking,
   getBookingById,
   updateBooking,
+  cancelBooking
 };

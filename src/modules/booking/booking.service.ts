@@ -1,33 +1,33 @@
 import { prisma } from "../../lib/prisma";
+import { userRole } from "../../middlewares/auth";
 
 const createBooking = async (payload: any, userId: string) => {
-
-   const existTutorProfile = await prisma.tutorProfile.findUnique({
-    where:{
-        id:payload.tutorId
-    }
-   });
-
-   const activeBookingCount = await prisma.booking.count({
-  where: {
-    userId: userId,
-    tutorId: payload.tutorId,
-    status: {
-      in: ["PENDING", "CONFIRMED"],
+  const existTutorProfile = await prisma.tutorProfile.findUnique({
+    where: {
+      id: payload.tutorId,
     },
-  },
-});
+  });
 
-if (activeBookingCount > 0) {
-  throw new Error("You already have an active booking");
-}
+  const activeBookingCount = await prisma.booking.count({
+    where: {
+      userId: userId,
+      tutorId: payload.tutorId,
+      status: {
+        in: ["PENDING", "CONFIRMED"],
+      },
+    },
+  });
 
-   if(!existTutorProfile){
-    throw new Error("Tutor profile not exist!!")
-   }
-   if(existTutorProfile && !existTutorProfile.availablity){
+  if (activeBookingCount > 0) {
+    throw new Error("You already have an active booking");
+  }
+
+  if (!existTutorProfile) {
+    throw new Error("Tutor profile not exist!!");
+  }
+  if (existTutorProfile && !existTutorProfile.availablity) {
     throw new Error("Tutor not available right now");
-   }
+  }
   const result = await prisma.booking.create({
     data: {
       ...payload,
@@ -37,43 +37,93 @@ if (activeBookingCount > 0) {
   return result;
 };
 
-const getBooking = async (userId:string,role:"STUDENT" | "TUTOR" | "ADMIN") => {
-  if(role === "STUDENT"){
+const getBooking = async (
+  userId: string,
+  role: "STUDENT" | "TUTOR" | "ADMIN",
+) => {
+  if (role === "STUDENT") {
     return await prisma.booking.findMany({
-      where:{
-        userId:userId
+      where: {
+        userId: userId,
       },
-      include:{tutor:true}
+      include: { tutor: true },
+    });
+  }
+  if (role === "TUTOR") {
+    const tutorProfile = await prisma.tutorProfile.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+
+    if (!tutorProfile) {
+      throw new Error("Tutor profile not found so no booking here");
+    }
+    return await prisma.booking.findMany({
+      where: {
+        tutorId: tutorProfile.id,
+        status:{
+          in: ["PENDING", "CONFIRMED", "COMPLETED"]
+        }
+      },
+      include: { user: true },
+    });
+  }
+  throw new Error("Invalid role provided");
+};
+
+const getBookingById = async (userId: string, bookingId: string,role:userRole) => {
+  if(role === "STUDENT"){
+    return await prisma.booking.findFirst({
+      where:{
+        id:bookingId,
+        userId:userId
+      }
     })
   }
-  if(role==="TUTOR"){
+  if(role === "TUTOR"){
     const tutorProfile = await prisma.tutorProfile.findUnique({
       where:{
         userId:userId
       }
-    });
-
+    })
     if(!tutorProfile){
-      throw new Error("Tutor profile not found so no booking here")
+      throw new Error("Tutor profile not found")
     }
-    return await prisma.booking.findMany({
+    return await prisma.booking.findFirst({
       where:{
+        id:bookingId,
         tutorId:tutorProfile.id
-      },
-      include:{user:true}
+      }
     })
   }
-   throw new Error("Invalid role provided");
 };
 
-const getBookingById = async (bookingId: string) => {
-  const result = await prisma.booking.findUnique({
-    where: {
-      id: bookingId,
+const cancelBooking = async(payload:any,userId:string,bookingId:string)=>{
+  const bookingData = await prisma.booking.findFirst({
+    where:{
+      id:bookingId,
+      userId:userId
+    }
+  })
+
+  if(!bookingData){
+    throw new Error("Booking not found")
+  }
+
+  if(bookingData.status !== "PENDING"){
+    throw new Error("You can only cancel pending booking")
+  }
+
+  return await prisma.booking.update({
+    where:{
+      id:bookingData.id,
     },
-  });
-  return result;
-};
+  data:{
+    ...payload
+  }
+  })
+}
 
 const updateBooking = async (
   payload: any,
@@ -101,14 +151,14 @@ const updateBooking = async (
   if (bookingData.tutorId !== existTutorProfile.id) {
     throw new Error("You cann't access this part");
   }
-   return await prisma.booking.update({
-      where: {
-        id: bookingData.id,
-      },
-      data: {
-        ...payload,
-      },
-    });
+  return await prisma.booking.update({
+    where: {
+      id: bookingData.id,
+    },
+    data: {
+      ...payload,
+    },
+  });
 };
 
 export const bookingService = {
@@ -116,4 +166,5 @@ export const bookingService = {
   getBooking,
   getBookingById,
   updateBooking,
+  cancelBooking
 };
