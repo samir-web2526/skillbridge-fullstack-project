@@ -1,14 +1,26 @@
+
 import { prisma } from "../lib/prisma";
 import { userRole } from "../middlewares/auth";
 
 
 async function seedAdmin(){
     try {
+
+        const adminName = process.env.ADMIN_NAME;
+        const adminEmail = process.env.ADMIN_EMAIL;
+        const adminPass = process.env.ADMIN_PASS;
         const adminData = {
-            name:"admin",
-            email:"admin@g.com",
+            name:adminName,
+            email:adminEmail,
             role:userRole.ADMIN,
-            password:"adminpass"
+            password:adminPass
+        }
+        if(!adminEmail){
+            throw new Error("email not set in .env")
+        }
+
+        if(!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASS){
+            throw new Error("Admin info is not set in .env");
         }
 
         const exitingUser = await prisma.user.findUnique({
@@ -17,7 +29,7 @@ async function seedAdmin(){
             }
         })
         if(exitingUser){
-            throw new Error("already registered")
+            throw new Error("Admin already exists")
         }
 
         const signUpAdmin = await fetch("http://localhost:5000/api/auth/sign-up/email",{
@@ -28,7 +40,7 @@ async function seedAdmin(){
             },
             body:JSON.stringify(adminData)
         })
-        console.log(signUpAdmin);
+        console.log("Admin created successfully");
     } catch (error) {
         console.error(error)
     }
