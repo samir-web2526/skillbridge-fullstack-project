@@ -34,7 +34,27 @@ const getReview = async (req: Request, res: Response) => {
     data: result,
   });
 };
+
+const updateReview = async(req: Request, res: Response)=>{
+ try {
+   const user = req.user;
+  const reviewId = req.params.reviewId;
+
+  const result = await reviewService.updateReview(req.body,user?.id as string,reviewId as string);
+  res.status(201).json({
+    message:"Review updated successfully",
+    data:result,
+  })
+
+ } catch (error:any) {
+  res.status(404).json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
+ }
+}
 export const reviewController = {
   createReview,
   getReview,
+  updateReview
 };

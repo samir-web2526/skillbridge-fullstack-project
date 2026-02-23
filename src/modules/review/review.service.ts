@@ -45,7 +45,31 @@ const getReview = async()=>{
 }
 
 
+const updateReview = async(payload:any,userId:string,reviewId:string)=>{
+    const existReview = await prisma.review.findUnique({
+        where:{
+            id:reviewId
+        }
+    })
+    if(!existReview){
+        throw new Error("You don't reviewed any tutor!!")
+    }
+    if(existReview.userId !== userId){
+       throw new Error("You are not allowed to update this review");
+    }
+     const updateReview = await prisma.review.update({
+            where:{
+                id:reviewId
+            },
+            data:{
+                ...payload
+            }
+        });
+        return updateReview
+}
+
 export const reviewService = {
     createReview,
-    getReview
+    getReview,
+    updateReview
 }
