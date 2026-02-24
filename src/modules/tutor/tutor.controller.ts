@@ -8,7 +8,7 @@ const createTutor = async (req: Request, res: Response) => {
     const user = req.user;
 
     if (!user) {
-      res.status(403).json({
+      return res.status(403).json({
         message: "You ar unauthorized!!",
       });
     }
@@ -99,9 +99,7 @@ const updateTutor = async (req: Request, res: Response) => {
 const deleteTutor = async (req: Request, res: Response) => {
   try {
     const tutorId = req.params.tutorId;
-    const result = await tutorService.deleteTutor(
-      tutorId as string,
-    );
+    const result = await tutorService.deleteTutor(tutorId as string);
     res.status(201).json({
       message: "Tutor updated successfully",
       data: result,

@@ -11,7 +11,6 @@ const createTutor = async (payload: any, userId: string) => {
   if (existingTutor) {
     throw new Error("Tutor profile already exits!!!");
   }
-
   const result = await prisma.tutorProfile.create({
     data: {
       ...payload,
