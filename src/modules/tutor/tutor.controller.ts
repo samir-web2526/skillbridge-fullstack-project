@@ -25,6 +25,36 @@ const createTutor = async (req: Request, res: Response) => {
   }
 };
 
+// const getTutor = async (req: Request, res: Response) => {
+//   try {
+//     const search =
+//       typeof req.query.search === "string" ? req.query.search : undefined;
+
+//     const { page, limit, skip, sortBy, sortOrder } = paginationSortHelpers(
+//       req.query,
+//     );
+
+//     const result = await tutorService.getTutor({
+//       search,
+//       page,
+//       limit,
+//       skip,
+//       sortBy,
+//       sortOrder,
+//     });
+//     res.status(201).json({
+//       message: "Tutor fetched successfully",
+//       data: result,
+//     });
+//   } catch (error: any) {
+//     res.status(404).json({
+//       success: false,
+//       message: error.message || "Something went wrong",
+//     });
+//   }
+// };
+
+
 const getTutor = async (req: Request, res: Response) => {
   try {
     const search =
@@ -35,13 +65,14 @@ const getTutor = async (req: Request, res: Response) => {
     );
 
     const result = await tutorService.getTutor({
-      search,
+      ...(search !== undefined ? { search } : {}),
       page,
       limit,
       skip,
       sortBy,
       sortOrder,
     });
+
     res.status(201).json({
       message: "Tutor fetched successfully",
       data: result,
@@ -119,3 +150,4 @@ export const tutorController = {
   updateTutor,
   deleteTutor,
 };
+
