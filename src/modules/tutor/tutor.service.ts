@@ -1,5 +1,6 @@
-import { prisma } from "../../lib/prisma";
 import { TutorProfileWhereInput } from "../../../generated/prisma/models";
+import { prisma } from "../../lib/prisma";
+
 
 const createTutor = async (payload: any, userId: string) => {
   const existingTutor = await prisma.tutorProfile.findUnique({
@@ -27,7 +28,7 @@ const getTutor = async (payload: {
   sortBy: string | undefined;
   sortOrder: string | undefined;
 }) => {
-  const allAndConditions: TutorProfileWhereInput[] = [];
+  const allAndConditions: TutorProfileWhereInput | TutorProfileWhereInput[] = [];
   if (payload.search) {
     allAndConditions.push({
       category: {
