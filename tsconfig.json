@@ -9,8 +9,9 @@
     // See also https://aka.ms/tsconfig/module
    
    "module": "ESNext",
-"moduleResolution": "bundler",
-    "target": "ES2023",
+   "moduleResolution": "bundler",
+   "target": "ES2023",
+
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -43,5 +44,4 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
   },
-   "include": ["src/**/*"]
 }
