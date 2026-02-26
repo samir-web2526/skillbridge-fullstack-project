@@ -5,10 +5,10 @@
   "main": "dist/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/server.js",
-   "build": "npx prisma generate && tsc && cp -r src/lib dist/lib && cp -r src/modules dist/",
     "dev": "tsx watch ./src/server.ts",
-    "seed:admin":"npx tsx ./src/scripts/seedAdmin.ts"
+    "seed:admin": "npx tsx ./src/scripts/seedAdmin.ts",
+    "build": "prisma generate && tsup",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,7 @@
     "@types/pg": "^8.16.0",
     "prisma": "^7.4.0",
     "tsx": "^4.21.0",
+    "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
   "dependencies": {
