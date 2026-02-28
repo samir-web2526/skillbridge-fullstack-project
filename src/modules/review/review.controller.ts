@@ -36,21 +36,21 @@ const getReview = async (req: Request, res: Response) => {
   });
 };
 
-const getReviewById = async(req: Request, res: Response)=>{
+const getReviewById = async (req: Request, res: Response) => {
   try {
     const reviewId = req.params.reviewId;
-  const result = await reviewService.getReviewById(reviewId as string);
-  res.status(201).json({
-    message: "Review fetched successfully by id",
-    data: result,
-  });
-  } catch (error:any) {
+    const result = await reviewService.getReviewById(reviewId as string);
+    res.status(201).json({
+      message: "Review fetched successfully by id",
+      data: result,
+    });
+  } catch (error: any) {
     res.status(404).json({
       success: false,
       message: error.message || "Something went wrong",
     });
   }
-}
+};
 
 const updateReview = async (req: Request, res: Response) => {
   try {
@@ -74,29 +74,33 @@ const updateReview = async (req: Request, res: Response) => {
   }
 };
 
-
-const deleteReview = async(req: Request, res: Response)=>{
+const deleteReview = async (req: Request, res: Response) => {
   try {
     const user = req.user;
     const reviewId = req.params.reviewId;
 
-    const result = await reviewService.deleteReview(req.body,user?.id as string,reviewId as string,user?.role as userRole);
+    const result = await reviewService.deleteReview(
+      req.body,
+      user?.id as string,
+      reviewId as string,
+      user?.role as userRole,
+    );
     res.status(201).json({
       message: "Review updated successfully",
       data: result,
     });
-  } catch (error:any) {
-     res.status(404).json({
+  } catch (error: any) {
+    res.status(404).json({
       success: false,
       message: error.message || "Something went wrong",
     });
   }
-}
+};
 
 export const reviewController = {
   createReview,
   getReview,
   updateReview,
   getReviewById,
-  deleteReview
+  deleteReview,
 };

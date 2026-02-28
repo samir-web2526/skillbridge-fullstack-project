@@ -34,7 +34,7 @@ const createReview = async (payload: any, userId: string) => {
     existBooking.userId !== userId ||
     existBooking.tutorId !== payload.tutorId
   ) {
-    throw new Error("You cann't review this tutor because he is not your user");
+    throw new Error("You cann't review this tutor because he is not your tutor");
   }
 
   const result = await prisma.review.create({
@@ -51,14 +51,14 @@ const getReview = async () => {
   return result;
 };
 
-const getReviewById = async(reviewId:string)=>{
+const getReviewById = async (reviewId: string) => {
   const result = await prisma.review.findUnique({
-    where:{
-      id:reviewId
-    }
+    where: {
+      id: reviewId,
+    },
   });
   return result;
-}
+};
 
 const updateReview = async (payload: any, userId: string, reviewId: string) => {
   const existReview = await prisma.review.findUnique({
@@ -83,32 +83,36 @@ const updateReview = async (payload: any, userId: string, reviewId: string) => {
   return updateReview;
 };
 
-const deleteReview = async(payload:any,userId:string,reviewId:string,role:userRole)=>{
-
+const deleteReview = async (
+  payload: any,
+  userId: string,
+  reviewId: string,
+  role: userRole,
+) => {
   const existReview = await prisma.review.findUnique({
-    where:{
-      id:reviewId
-    }
+    where: {
+      id: reviewId,
+    },
   });
-  if(!existReview){
+  if (!existReview) {
     throw new Error("Review not found!!");
   }
 
-  if(role === "STUDENT" && existReview.userId !== userId){
+  if (role === "STUDENT" && existReview.userId !== userId) {
     throw new Error("You can delete only your own review");
   }
-  
+
   return await prisma.review.delete({
-    where:{
-      id:reviewId
-    }
-  })
-}
+    where: {
+      id: reviewId,
+    },
+  });
+};
 
 export const reviewService = {
   createReview,
   getReview,
   updateReview,
   getReviewById,
-  deleteReview
+  deleteReview,
 };

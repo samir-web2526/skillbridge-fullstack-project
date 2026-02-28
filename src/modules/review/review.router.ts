@@ -5,11 +5,15 @@ import auth, { userRole } from "../../middlewares/auth";
 const router = Router();
 router.post("/", auth(userRole.STUDENT), reviewController.createReview);
 router.get("/", reviewController.getReview);
-router.get("/:reviewId",reviewController.getReviewById);
+router.get("/:reviewId", reviewController.getReviewById);
 router.patch(
   "/:reviewId",
   auth(userRole.STUDENT),
   reviewController.updateReview,
 );
-router.delete("/:reviewId",auth(userRole.STUDENT,userRole.ADMIN),reviewController.deleteReview);
+router.delete(
+  "/:reviewId",
+  auth(userRole.STUDENT, userRole.ADMIN),
+  reviewController.deleteReview,
+);
 export const reviewRouter = router;

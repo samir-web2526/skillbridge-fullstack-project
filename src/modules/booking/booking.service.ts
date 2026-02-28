@@ -57,6 +57,7 @@ const getBooking = async (
       },
       include: {
         tutor: true,
+        review:true
       },
       skip: payload.skip,
       take: payload.limit,
@@ -86,7 +87,7 @@ const getBooking = async (
         },
       },
       include: {
-        user: true,
+        user: true
       },
       skip: payload.skip,
       take: payload.limit,
@@ -117,6 +118,7 @@ const getBooking = async (
       status: b.status,
       user: b.user,
       tutor: b.tutor,
+      review: b.review,
       createdAt: b.createdAt,
       updatedAt: b.updatedAt,
     };
@@ -194,7 +196,6 @@ const getBookingById = async (
 };
 
 const cancelBooking = async (
-  payload: any,
   userId: string,
   bookingId: string,
 ) => {
@@ -218,7 +219,7 @@ const cancelBooking = async (
       id: bookingData.id,
     },
     data: {
-      ...payload,
+      status:"CANCELLED"
     },
   });
 };

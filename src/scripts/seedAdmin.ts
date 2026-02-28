@@ -26,7 +26,7 @@ async function seedAdmin() {
 
     if (exitingUser) {
       throw new Error("Admin already exists");
-    };
+    }
 
     const signUpAdmin = await fetch(
       "http://localhost:5000/api/auth/sign-up/email",

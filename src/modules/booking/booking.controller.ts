@@ -78,7 +78,6 @@ const cancelBooking = async (req: Request, res: Response) => {
     const user = req.user;
     const bookingId = req.params.bookingId;
     const result = await bookingService.cancelBooking(
-      req.body,
       user?.id as string,
       bookingId as string,
     );

@@ -11,7 +11,7 @@ export const auth = betterAuth({
     trustedOrigins:[process.env.APP_URL!],
     emailAndPassword:{
         enabled:true,
-        requireEmailVerification:false,
+        requireEmailVerification:true,
         autoLoginAfterRegister: false
     },
     user:{
