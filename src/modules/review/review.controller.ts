@@ -47,12 +47,9 @@ const getAllReviews = async (req: Request, res: Response) => {
 
 const getMyReview = async (req: Request, res: Response) => {
   try {
-    const tutorId = req.user!.id;
+    const userId = req.user!.id;
     const { page, limit, skip } = paginationSortHelpers(req.query);
-    const result = await reviewService.getReview(
-      { page, limit, skip },
-      tutorId,
-    );
+    const result = await reviewService.getReview({ page, limit, skip }, userId);
     res.status(200).json({
       message: "Reviews fetched successfully",
       data: result,
@@ -109,7 +106,6 @@ const deleteReview = async (req: Request, res: Response) => {
     const reviewId = req.params.reviewId;
 
     const result = await reviewService.deleteReview(
-      req.body,
       user?.id as string,
       reviewId as string,
       user?.role as userRole,

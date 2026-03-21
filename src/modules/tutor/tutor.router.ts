@@ -5,6 +5,7 @@ import auth, { userRole } from "../../middlewares/auth";
 const router = Router();
 router.post("/", auth(userRole.TUTOR), tutorController.createTutor);
 router.get("/", tutorController.getTutor);
+router.get("/stats", tutorController.getStats);
 router.get("/profile", auth(userRole.TUTOR), tutorController.getMyProfile);
 router.get("/:tutorId", tutorController.getTutorById);
 router.put("/:tutorId", auth(userRole.TUTOR), tutorController.updateTutor);

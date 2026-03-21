@@ -64,9 +64,15 @@ const getReview = async (
     limit: number;
     skip: number;
   },
-  tutorId?: string,
+  userId?: string,
 ) => {
-  const where = tutorId ? { tutor: { userId: tutorId } } : {};
+  let where = {};
+
+  if (userId) {
+    where = {
+      OR: [{ userId: userId }, { tutor: { userId: userId } }],
+    };
+  }
 
   const [reviews, total] = await Promise.all([
     prisma.review.findMany({
@@ -140,7 +146,6 @@ const updateReview = async (payload: any, userId: string, reviewId: string) => {
 };
 
 const deleteReview = async (
-  payload: any,
   userId: string,
   reviewId: string,
   role: userRole,

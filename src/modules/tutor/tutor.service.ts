@@ -175,9 +175,18 @@ const getMyProfile = async (userId: string) => {
     include: {
       user: true,
       category: true,
+      _count: {
+        select: { booking: true },
+      },
     },
   });
-  return profile;
+
+  if (!profile) return null;
+
+  return {
+    ...profile,
+    totalBookings: profile._count.booking,
+  };
 };
 
 const updateTutor = async (payload: any, userId: string, tutorId: string) => {
@@ -233,6 +242,28 @@ const deleteTutor = async (tutorId: string) => {
     },
   });
 };
+const getStats = async () => {
+  const totalTutors = await prisma.tutorProfile.count({
+    where: { isDeleted: false },
+  });
+
+  const totalStudents = await prisma.user.count({
+    where: { role: "STUDENT" },
+  });
+
+  const reviews = await prisma.review.findMany({
+    select: { rating: true },
+  });
+
+  const avgRating =
+    reviews.length > 0
+      ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
+      : 0;
+
+  const satisfactionPercent = Math.round((avgRating / 5) * 100);
+
+  return { totalTutors, totalStudents, satisfactionPercent };
+};
 
 export const tutorService = {
   createTutor,
@@ -241,4 +272,5 @@ export const tutorService = {
   getMyProfile,
   updateTutor,
   deleteTutor,
+  getStats,
 };
