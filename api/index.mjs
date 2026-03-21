@@ -82,7 +82,7 @@ var prisma = new PrismaClient({ adapter });
 // src/lib/auth.ts
 var auth = betterAuth({
   database: prismaAdapter(prisma, {
-    provider: "sqlite"
+    provider: "postgresql"
     // or "mysql", "postgresql", ...etc
   }),
   trustedOrigins: [process.env.APP_URL],
@@ -95,8 +95,8 @@ var auth = betterAuth({
     additionalFields: {
       role: {
         type: "string",
-        defaultValue: "STUDENT",
-        required: false
+        required: false,
+        defaultValue: "STUDENT"
       },
       status: {
         type: "string",
@@ -159,7 +159,8 @@ var getBooking = async (payload, userId, role) => {
         userId
       },
       include: {
-        tutor: true
+        tutor: true,
+        review: true
       },
       skip: payload.skip,
       take: payload.limit
@@ -215,6 +216,7 @@ var getBooking = async (payload, userId, role) => {
       status: b.status,
       user: b.user,
       tutor: b.tutor,
+      review: b.review,
       createdAt: b.createdAt,
       updatedAt: b.updatedAt
     };
@@ -281,7 +283,7 @@ var getBookingById = async (userId, bookingId, role) => {
   }
   throw new Error("Invalid role provided");
 };
-var cancelBooking = async (payload, userId, bookingId) => {
+var cancelBooking = async (userId, bookingId) => {
   const bookingData = await prisma.booking.findFirst({
     where: {
       id: bookingId,
@@ -299,7 +301,7 @@ var cancelBooking = async (payload, userId, bookingId) => {
       id: bookingData.id
     },
     data: {
-      ...payload
+      status: "CANCELLED"
     }
   });
 };
@@ -429,7 +431,6 @@ var cancelBooking2 = async (req, res) => {
     const user = req.user;
     const bookingId = req.params.bookingId;
     const result = await bookingService.cancelBooking(
-      req.body,
       user?.id,
       bookingId
     );
@@ -1036,7 +1037,7 @@ var createReview = async (payload, userId) => {
     );
   }
   if (existBooking.userId !== userId || existBooking.tutorId !== payload.tutorId) {
-    throw new Error("You cann't review this tutor because he is not your user");
+    throw new Error("You cann't review this tutor because he is not your tutor");
   }
   const result = await prisma.review.create({
     data: {
@@ -1176,7 +1177,12 @@ var deleteReview2 = async (req, res) => {
   try {
     const user = req.user;
     const reviewId = req.params.reviewId;
-    const result = await reviewService.deleteReview(req.body, user?.id, reviewId, user?.role);
+    const result = await reviewService.deleteReview(
+      req.body,
+      user?.id,
+      reviewId,
+      user?.role
+    );
     res.status(201).json({
       message: "Review updated successfully",
       data: result
@@ -1206,7 +1212,11 @@ router4.patch(
   auth_default("STUDENT" /* STUDENT */),
   reviewController.updateReview
 );
-router4.delete("/:reviewId", auth_default("STUDENT" /* STUDENT */, "ADMIN" /* ADMIN */), reviewController.deleteReview);
+router4.delete(
+  "/:reviewId",
+  auth_default("STUDENT" /* STUDENT */, "ADMIN" /* ADMIN */),
+  reviewController.deleteReview
+);
 var reviewRouter = router4;
 
 // src/app.ts

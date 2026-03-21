@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { reviewService } from "./review.service";
 import { userRole } from "../../middlewares/auth";
+import paginationSortHelpers from "../../helpers/paginationSortHelpers";
 
 const createReview = async (req: Request, res: Response) => {
   try {
@@ -28,12 +29,40 @@ const createReview = async (req: Request, res: Response) => {
   }
 };
 
-const getReview = async (req: Request, res: Response) => {
-  const result = await reviewService.getReview();
-  res.status(201).json({
-    message: "Review fetched successfully",
-    data: result,
-  });
+const getAllReviews = async (req: Request, res: Response) => {
+  try {
+    const { page, limit, skip } = paginationSortHelpers(req.query);
+    const result = await reviewService.getReview({ page, limit, skip });
+    res.status(200).json({
+      message: "Reviews fetched successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
+  }
+};
+
+const getMyReview = async (req: Request, res: Response) => {
+  try {
+    const tutorId = req.user!.id;
+    const { page, limit, skip } = paginationSortHelpers(req.query);
+    const result = await reviewService.getReview(
+      { page, limit, skip },
+      tutorId,
+    );
+    res.status(200).json({
+      message: "Reviews fetched successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
+  }
 };
 
 const getReviewById = async (req: Request, res: Response) => {
@@ -99,7 +128,8 @@ const deleteReview = async (req: Request, res: Response) => {
 
 export const reviewController = {
   createReview,
-  getReview,
+  getAllReviews,
+  getMyReview,
   updateReview,
   getReviewById,
   deleteReview,

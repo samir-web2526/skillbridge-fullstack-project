@@ -25,7 +25,7 @@ const createBooking = async (payload: any, userId: string) => {
   if (!existTutorProfile) {
     throw new Error("Tutor profile not exist!!");
   }
-  if (existTutorProfile && !existTutorProfile.availablity) {
+  if (existTutorProfile && !existTutorProfile.isAvailable) {
     throw new Error("Tutor not available right now");
   }
   const result = await prisma.booking.create({
@@ -49,21 +49,26 @@ const getBooking = async (
   role: "STUDENT" | "TUTOR" | "ADMIN",
 ) => {
   let booking: any[] = [];
-  let totalBooking = 0;
+  let total = 0;
   if (role === "STUDENT") {
     booking = await prisma.booking.findMany({
       where: {
         userId: userId,
       },
       include: {
-        tutor: true,
-        review:true
+        tutor: {
+          include: {
+            user: true,
+            category: true,
+          },
+        },
+        review: true,
       },
       skip: payload.skip,
       take: payload.limit,
     });
 
-    totalBooking = await prisma.booking.count({
+    total = await prisma.booking.count({
       where: {
         userId: userId,
       },
@@ -87,13 +92,13 @@ const getBooking = async (
         },
       },
       include: {
-        user: true
+        user: true,
       },
       skip: payload.skip,
       take: payload.limit,
     });
 
-    totalBooking = await prisma.booking.count({
+    total = await prisma.booking.count({
       where: {
         tutorId: tutorProfile.id,
       },
@@ -103,13 +108,17 @@ const getBooking = async (
   if (role === "ADMIN") {
     booking = await prisma.booking.findMany({
       include: {
-        tutor: true,
+        tutor: {
+          include: {
+            user: true,
+          },
+        },
         user: true,
       },
       skip: payload.skip,
       take: payload.limit,
     });
-    totalBooking = await prisma.booking.count();
+    total = await prisma.booking.count();
   }
 
   const formattedBookings = booking.map((b) => {
@@ -127,10 +136,10 @@ const getBooking = async (
   return {
     data: formattedBookings,
     paginations: {
-      totalBooking,
+      total,
       page: payload.page,
       limit: payload.limit,
-      totalPage: Math.ceil(totalBooking / payload.limit),
+      totalPage: Math.ceil(total / payload.limit),
     },
   };
 };
@@ -186,7 +195,11 @@ const getBookingById = async (
         id: existBooking.id,
       },
       include: {
-        tutor: true,
+        tutor: {
+          include: {
+            user: true,
+          },
+        },
         user: true,
       },
     });
@@ -195,10 +208,7 @@ const getBookingById = async (
   throw new Error("Invalid role provided");
 };
 
-const cancelBooking = async (
-  userId: string,
-  bookingId: string,
-) => {
+const cancelBooking = async (userId: string, bookingId: string) => {
   const bookingData = await prisma.booking.findFirst({
     where: {
       id: bookingId,
@@ -219,7 +229,7 @@ const cancelBooking = async (
       id: bookingData.id,
     },
     data: {
-      status:"CANCELLED"
+      status: "CANCELLED",
     },
   });
 };

@@ -13,12 +13,12 @@ const createTutor = async (req: Request, res: Response) => {
       });
     }
     const result = await tutorService.createTutor(req.body, user?.id as string);
-    res.status(201).json({
+    return res.status(201).json({
       message: "Tutor Profile Created Successfully",
       data: result,
     });
   } catch (error: any) {
-    res.status(404).json({
+    return res.status(404).json({
       success: false,
       message: error.message || "Something went wrong",
     });
@@ -29,6 +29,20 @@ const getTutor = async (req: Request, res: Response) => {
   try {
     const search =
       typeof req.query.search === "string" ? req.query.search : undefined;
+    const category =
+      typeof req.query.category === "string" ? req.query.category : undefined;
+
+    const minPrice = req.query.minPrice
+      ? Number(req.query.minPrice)
+      : undefined;
+    const maxPrice = req.query.maxPrice
+      ? Number(req.query.maxPrice)
+      : undefined;
+    const minRating = req.query.minRating
+      ? Number(req.query.minRating)
+      : undefined;
+
+    const availableOnly = req.query.availableOnly === "true";
 
     const { page, limit, skip, sortBy, sortOrder } = paginationSortHelpers(
       req.query,
@@ -36,18 +50,23 @@ const getTutor = async (req: Request, res: Response) => {
 
     const result = await tutorService.getTutor({
       search,
+      category,
+      minPrice,
+      maxPrice,
+      minRating,
+      availableOnly,
       page,
       limit,
       skip,
       sortBy,
       sortOrder,
     });
-    res.status(201).json({
+    return res.status(200).json({
       message: "Tutor fetched successfully",
       data: result,
     });
   } catch (error: any) {
-    res.status(404).json({
+    return res.status(404).json({
       success: false,
       message: error.message || "Something went wrong",
     });
@@ -58,12 +77,27 @@ const getTutorById = async (req: Request, res: Response) => {
   try {
     const tutorId = req.params.tutorId;
     const result = await tutorService.getTutorById(tutorId as string);
-    res.status(201).json({
+    return res.status(200).json({
       message: "Tutor Fetched successfully by Id",
       data: result,
     });
   } catch (error: any) {
-    res.status(404).json({
+    return res.status(404).json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
+  }
+};
+
+const getMyProfile = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const result = await tutorService.getMyProfile(user?.id as string);
+    return res.status(200).json({
+      data: result,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
       success: false,
       message: error.message || "Something went wrong",
     });
@@ -84,12 +118,12 @@ const updateTutor = async (req: Request, res: Response) => {
       user?.id as string,
       tutorId as string,
     );
-    res.status(201).json({
+    return res.status(200).json({
       message: "Tutor updated successfully",
       data: result,
     });
   } catch (error: any) {
-    res.status(404).json({
+    return res.status(404).json({
       success: false,
       message: error.message || "Something went wrong",
     });
@@ -100,8 +134,8 @@ const deleteTutor = async (req: Request, res: Response) => {
   try {
     const tutorId = req.params.tutorId;
     const result = await tutorService.deleteTutor(tutorId as string);
-    res.status(201).json({
-      message: "Tutor updated successfully",
+    return res.status(200).json({
+      message: "Tutor deleted successfully",
       data: result,
     });
   } catch (error: any) {
@@ -116,7 +150,7 @@ export const tutorController = {
   createTutor,
   getTutor,
   getTutorById,
+  getMyProfile,
   updateTutor,
   deleteTutor,
 };
-

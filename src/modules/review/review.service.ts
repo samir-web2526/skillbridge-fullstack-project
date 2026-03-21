@@ -34,7 +34,9 @@ const createReview = async (payload: any, userId: string) => {
     existBooking.userId !== userId ||
     existBooking.tutorId !== payload.tutorId
   ) {
-    throw new Error("You cann't review this tutor because he is not your tutor");
+    throw new Error(
+      "You cann't review this tutor because he is not your tutor",
+    );
   }
 
   const result = await prisma.review.create({
@@ -43,12 +45,56 @@ const createReview = async (payload: any, userId: string) => {
       userId,
     },
   });
+  const reviews = await prisma.review.findMany({
+    where: { tutorId: payload.tutorId },
+    select: { rating: true },
+  });
+  const averageRating =
+    reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length;
+  await prisma.tutorProfile.update({
+    where: { id: payload.tutorId },
+    data: { averageRating },
+  });
   return result;
 };
 
-const getReview = async () => {
-  const result = await prisma.review.findMany();
-  return result;
+const getReview = async (
+  payload: {
+    page: number;
+    limit: number;
+    skip: number;
+  },
+  tutorId?: string,
+) => {
+  const where = tutorId ? { tutor: { userId: tutorId } } : {};
+
+  const [reviews, total] = await Promise.all([
+    prisma.review.findMany({
+      where,
+      include: {
+        user: true,
+        tutor: {
+          include: {
+            user: true,
+            category: true,
+          },
+        },
+      },
+      skip: payload.skip,
+      take: payload.limit,
+    }),
+    prisma.review.count({ where }),
+  ]);
+
+  return {
+    data: reviews,
+    paginations: {
+      total,
+      page: payload.page,
+      limit: payload.limit,
+      totalPage: Math.ceil(total / payload.limit),
+    },
+  };
 };
 
 const getReviewById = async (reviewId: string) => {
@@ -79,6 +125,16 @@ const updateReview = async (payload: any, userId: string, reviewId: string) => {
     data: {
       ...payload,
     },
+  });
+  const reviews = await prisma.review.findMany({
+    where: { tutorId: existReview.tutorId },
+    select: { rating: true },
+  });
+  const averageRating =
+    reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length;
+  await prisma.tutorProfile.update({
+    where: { id: existReview.tutorId },
+    data: { averageRating },
   });
   return updateReview;
 };

@@ -1,72 +1,95 @@
 import { TutorProfileWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 
-
 const createTutor = async (payload: any, userId: string) => {
   const existingTutor = await prisma.tutorProfile.findUnique({
-    where: {
-      userId: userId,
-    },
+    where: { userId },
   });
+
   if (existingTutor) {
-    throw new Error("Tutor profile already exits!!!");
+    throw new Error("Tutor profile already exists!");
   }
-  const result = await prisma.tutorProfile.create({
-    data: {
-      ...payload,
-      userId,
-    },
+
+  return await prisma.tutorProfile.create({
+    data: { ...payload, userId },
   });
-  return result;
 };
 
 const getTutor = async (payload: {
   search: string | undefined;
+  category: string | undefined;
+  minPrice: number | undefined;
+  maxPrice: number | undefined;
+  minRating: number | undefined;
+  availableOnly: boolean;
   page: number;
   limit: number;
   skip: number;
   sortBy: string | undefined;
   sortOrder: string | undefined;
 }) => {
-  const allAndConditions: TutorProfileWhereInput | TutorProfileWhereInput[] = [];
+  const allAndConditions: TutorProfileWhereInput[] = [];
+
+  allAndConditions.push({ isDeleted: false });
+
   if (payload.search) {
     allAndConditions.push({
-      category: {
-        is: {
-          name: {
-            contains: payload.search,
-            mode: "insensitive",
+      OR: [
+        {
+          category: {
+            is: { name: { contains: payload.search, mode: "insensitive" } },
           },
         },
+        {
+          user: {
+            is: { name: { contains: payload.search, mode: "insensitive" } },
+          },
+        },
+      ],
+    });
+  }
+
+  if (payload.category && payload.category !== "All") {
+    allAndConditions.push({
+      category: {
+        is: { name: { equals: payload.category, mode: "insensitive" } },
       },
     });
+  }
+
+  if (payload.minPrice !== undefined || payload.maxPrice !== undefined) {
+    allAndConditions.push({
+      hourlyRate: {
+        ...(payload.minPrice !== undefined && { gte: payload.minPrice }),
+        ...(payload.maxPrice !== undefined && { lte: payload.maxPrice }),
+      },
+    });
+  }
+
+  if (payload.minRating !== undefined) {
+    allAndConditions.push({ averageRating: { gte: payload.minRating } });
+  }
+
+  if (payload.availableOnly) {
+    allAndConditions.push({ isAvailable: true });
   }
 
   const tutors = await prisma.tutorProfile.findMany({
     take: payload.limit,
     skip: payload.skip,
-    where: {
-      AND: allAndConditions,
-    },
+    where: { AND: allAndConditions },
     orderBy:
       payload.sortBy && payload.sortOrder
-        ? {
-            [payload.sortBy]: payload.sortOrder,
-          }
+        ? { [payload.sortBy]: payload.sortOrder }
         : { createdAt: "desc" },
     include: {
       category: true,
       user: true,
       _count: {
-        select: {
-          booking: true,
-          review: true,
-        },
+        select: { booking: true, review: true },
       },
       review: {
-        select: {
-          rating: true,
-        },
+        select: { rating: true },
       },
     },
   });
@@ -82,6 +105,9 @@ const getTutor = async (payload: {
     return {
       id: tutor.id,
       bio: tutor.bio,
+      hourlyRate: tutor.hourlyRate,
+      experience: tutor.experience,
+      isAvailable: tutor.isAvailable,
       category: tutor.category,
       user: tutor.user,
       totalBookings: tutor._count.booking,
@@ -91,10 +117,9 @@ const getTutor = async (payload: {
   });
 
   const total = await prisma.tutorProfile.count({
-    where: {
-      AND: allAndConditions,
-    },
+    where: { AND: allAndConditions },
   });
+
   return {
     data: formattedTutors,
     paginations: {
@@ -108,22 +133,15 @@ const getTutor = async (payload: {
 
 const getTutorById = async (tutorId: string) => {
   const tutor = await prisma.tutorProfile.findUnique({
-    where: {
-      id: tutorId,
-    },
+    where: { id: tutorId, isDeleted: false },
     include: {
       category: true,
       user: true,
       _count: {
-        select: {
-          booking: true,
-          review: true,
-        },
+        select: { booking: true, review: true },
       },
       review: {
-        select: {
-          rating: true,
-        },
+        select: { rating: true },
       },
     },
   });
@@ -137,26 +155,35 @@ const getTutorById = async (tutorId: string) => {
     totalReview > 0
       ? Number(tutor.review.reduce((acc, r) => acc + r.rating, 0) / totalReview)
       : 0;
-  const formattedTutor = {
+
+  return {
     id: tutor.id,
     bio: tutor.bio,
+    hourlyRate: tutor.hourlyRate,
+    experience: tutor.experience,
+    isAvailable: tutor.isAvailable,
     category: tutor.category,
     user: tutor.user,
     totalBookings: tutor._count.booking,
     totalReview,
-    averageRating: averageRating,
+    averageRating,
   };
-
-  return formattedTutor;
+};
+const getMyProfile = async (userId: string) => {
+  const profile = await prisma.tutorProfile.findFirst({
+    where: { userId },
+    include: {
+      user: true,
+      category: true,
+    },
+  });
+  return profile;
 };
 
 const updateTutor = async (payload: any, userId: string, tutorId: string) => {
   const tutorProfileData = await prisma.tutorProfile.findUnique({
-    where: {
-      id: tutorId,
-    },
+    where: { id: tutorId },
   });
-  console.log(tutorProfileData);
 
   if (!tutorProfileData) {
     throw new Error("Tutor not found");
@@ -167,9 +194,7 @@ const updateTutor = async (payload: any, userId: string, tutorId: string) => {
   }
 
   return await prisma.tutorProfile.update({
-    where: {
-      id: tutorProfileData.id,
-    },
+    where: { id: tutorProfileData.id },
     data: {
       ...payload,
     },
@@ -177,25 +202,43 @@ const updateTutor = async (payload: any, userId: string, tutorId: string) => {
 };
 
 const deleteTutor = async (tutorId: string) => {
+  const tutor = await prisma.tutorProfile.findUnique({
+    where: { id: tutorId },
+  });
+
   const existBooking = await prisma.booking.findFirst({
     where: {
       tutorId: tutorId,
     },
   });
+
+  if (!tutor) {
+    throw new Error("Tutor not found");
+  }
+
+  if (tutor.isDeleted) {
+    throw new Error("Tutor already deleted");
+  }
+
   if (existBooking) {
     throw new Error("You cann't delete tutor with existing bookings");
   }
 
-  return await prisma.tutorProfile.delete({
-    where: {
-      id: tutorId,
+  return await prisma.tutorProfile.update({
+    where: { id: tutorId },
+    data: {
+      isDeleted: true,
+      deletedAt: new Date(),
+      isAvailable: false,
     },
   });
 };
+
 export const tutorService = {
   createTutor,
   getTutor,
   getTutorById,
+  getMyProfile,
   updateTutor,
   deleteTutor,
 };

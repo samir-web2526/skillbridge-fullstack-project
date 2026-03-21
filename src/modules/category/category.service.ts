@@ -1,18 +1,45 @@
 import { prisma } from "../../lib/prisma";
 
 const createCategory = async (payload: any) => {
-  console.log("payload", payload);
   const result = await prisma.category.create({
-    data: {
-      ...payload,
-    },
+    data: { ...payload },
   });
   return result;
 };
 
-const getCategory = async () => {
-  const result = await prisma.category.findMany();
-  return result;
+const getCategory = async (payload: {
+  page: number;
+  limit: number;
+  skip: number;
+}) => {
+  const categories = await prisma.category.findMany({
+    skip: payload.skip,
+    take: payload.limit,
+    include: {
+      _count: {
+        select: { tutor: true },
+      },
+      tutor: {
+        select: {
+          _count: {
+            select: {
+              booking: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  const total = await prisma.category.count();
+  return {
+    data: categories,
+    paginations: {
+      total,
+      page: payload.page,
+      limit: payload.limit,
+      totalPage: Math.ceil(total / payload.limit),
+    },
+  };
 };
 
 const getCategoryById = async (categoryId: string) => {

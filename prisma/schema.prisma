@@ -28,25 +28,31 @@ model User {
 }
 
 model TutorProfile {
-  id          String    @id @default(uuid())
-  bio         String?
-  hourlyRate  Int
-  experience  Int
-  availablity Boolean   @default(true)
-  categoryId  String
-  userId      String    @unique
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  category    Category  @relation(fields: [categoryId], references: [id])
-  user        User      @relation(fields: [userId], references: [id])
-  booking     Booking[] @relation("TutorBookings")
-  review      Review[]
+  id            String    @id @default(uuid())
+  bio           String?
+  hourlyRate    Int
+  experience    Int
+  averageRating Float     @default(0)   
+  isAvailable   Boolean   @default(true)
+  isDeleted     Boolean   @default(false)
+  deletedAt     DateTime?
+  categoryId    String
+  userId        String    @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  category      Category  @relation(fields: [categoryId], references: [id])
+  user          User      @relation(fields: [userId], references: [id])
+  booking       Booking[] @relation("TutorBookings")
+  review        Review[]
+
+  @@map("tutor_profile") 
 }
 
 model Category {
-  id    String         @id @default(uuid())
-  name  String         @unique
-  tutor TutorProfile[]
+  id          String         @id @default(uuid())
+  name        String         @unique
+  description String?
+  tutor       TutorProfile[]
 
   @@map("category")
 }
@@ -54,6 +60,8 @@ model Category {
 model Booking {
   id        String        @id @default(uuid())
   date      DateTime
+  startTime DateTime?    
+  endTime   DateTime?     
   status    BookingStatus @default(PENDING)
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
@@ -134,6 +142,7 @@ enum BookingStatus {
   CONFIRMED
   COMPLETED
   CANCELLED
+  REJECTED  
 }
 
 enum Role {
@@ -144,5 +153,5 @@ enum Role {
 
 enum UserStatus {
   ACTIVE
-  BANED
+  BANNED
 }

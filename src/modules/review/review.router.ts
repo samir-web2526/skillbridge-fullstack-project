@@ -4,7 +4,8 @@ import auth, { userRole } from "../../middlewares/auth";
 
 const router = Router();
 router.post("/", auth(userRole.STUDENT), reviewController.createReview);
-router.get("/", reviewController.getReview);
+router.get("/", reviewController.getAllReviews);
+router.get("/my-reviews", auth(userRole.TUTOR), reviewController.getMyReview);
 router.get("/:reviewId", reviewController.getReviewById);
 router.patch(
   "/:reviewId",
