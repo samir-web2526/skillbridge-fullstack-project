@@ -15,6 +15,122 @@ const createTutor = async (payload: any, userId: string) => {
   });
 };
 
+// const getTutor = async (payload: {
+//   search: string | undefined;
+//   category: string | undefined;
+//   minPrice: number | undefined;
+//   maxPrice: number | undefined;
+//   minRating: number | undefined;
+//   availableOnly: boolean;
+//   page: number;
+//   limit: number;
+//   skip: number;
+//   sortBy: string | undefined;
+//   sortOrder: string | undefined;
+// }) => {
+//   const allAndConditions: TutorProfileWhereInput[] = [];
+
+//   allAndConditions.push({ isDeleted: false });
+
+//   if (payload.search) {
+//     allAndConditions.push({
+//       OR: [
+//         {
+//           category: {
+//             is: { name: { contains: payload.search, mode: "insensitive" } },
+//           },
+//         },
+//         {
+//           user: {
+//             is: { name: { contains: payload.search, mode: "insensitive" } },
+//           },
+//         },
+//       ],
+//     });
+//   }
+
+//   if (payload.category && payload.category !== "All") {
+//     allAndConditions.push({
+//       category: {
+//         is: { name: { equals: payload.category, mode: "insensitive" } },
+//       },
+//     });
+//   }
+
+//   if (payload.minPrice !== undefined || payload.maxPrice !== undefined) {
+//     allAndConditions.push({
+//       hourlyRate: {
+//         ...(payload.minPrice !== undefined && { gte: payload.minPrice }),
+//         ...(payload.maxPrice !== undefined && { lte: payload.maxPrice }),
+//       },
+//     });
+//   }
+
+//   if (payload.minRating !== undefined) {
+//     allAndConditions.push({
+//       AND: [
+//         { averageRating: { gte: payload.minRating } },
+//         { averageRating: { gt: 0 } },
+//       ],
+//     });
+//   }
+//   const tutors = await prisma.tutorProfile.findMany({
+//     take: payload.limit,
+//     skip: payload.skip,
+//     where: { AND: allAndConditions },
+//     orderBy:
+//       payload.sortBy && payload.sortOrder
+//         ? { [payload.sortBy]: payload.sortOrder }
+//         : { createdAt: "desc" },
+//     include: {
+//       category: true,
+//       user: true,
+//       _count: {
+//         select: { booking: true, review: true },
+//       },
+//       review: {
+//         select: { rating: true },
+//       },
+//     },
+//   });
+
+//   const formattedTutors = tutors.map((tutor) => {
+//     const totalReview = tutor.review.length;
+//     const averageRating =
+//       totalReview > 0
+//         ? Number(
+//             tutor.review.reduce((acc, r) => acc + r.rating, 0) / totalReview,
+//           )
+//         : 0;
+//     return {
+//       id: tutor.id,
+//       bio: tutor.bio,
+//       hourlyRate: tutor.hourlyRate,
+//       experience: tutor.experience,
+//       isAvailable: tutor.isAvailable,
+//       category: tutor.category,
+//       user: tutor.user,
+//       totalBookings: tutor._count.booking,
+//       totalReview,
+//       averageRating,
+//     };
+//   });
+
+//   const total = await prisma.tutorProfile.count({
+//     where: { AND: allAndConditions },
+//   });
+
+//   return {
+//     data: formattedTutors,
+//     paginations: {
+//       total,
+//       page: payload.page,
+//       limit: payload.limit,
+//       totalPage: Math.ceil(total / payload.limit),
+//     },
+//   };
+// };
+
 const getTutor = async (payload: {
   search: string | undefined;
   category: string | undefined;
@@ -67,7 +183,12 @@ const getTutor = async (payload: {
   }
 
   if (payload.minRating !== undefined) {
-    allAndConditions.push({ averageRating: { gte: payload.minRating } });
+    allAndConditions.push({
+      AND: [
+        { averageRating: { gte: payload.minRating } },
+        { averageRating: { gt: 0 } },
+      ],
+    });
   }
 
   if (payload.availableOnly) {
@@ -89,19 +210,15 @@ const getTutor = async (payload: {
         select: { booking: true, review: true },
       },
       review: {
-        select: { rating: true },
+        include: {
+          user: { select: { name: true, image: true } },
+        },
+        orderBy: { createdAt: "desc" },
       },
     },
   });
 
   const formattedTutors = tutors.map((tutor) => {
-    const totalReview = tutor.review.length;
-    const averageRating =
-      totalReview > 0
-        ? Number(
-            tutor.review.reduce((acc, r) => acc + r.rating, 0) / totalReview,
-          )
-        : 0;
     return {
       id: tutor.id,
       bio: tutor.bio,
@@ -111,8 +228,9 @@ const getTutor = async (payload: {
       category: tutor.category,
       user: tutor.user,
       totalBookings: tutor._count.booking,
-      totalReview,
-      averageRating,
+      totalReview: tutor._count.review,
+      averageRating: tutor.averageRating,
+      reviews: tutor.review,
     };
   });
 
@@ -130,7 +248,6 @@ const getTutor = async (payload: {
     },
   };
 };
-
 const getTutorById = async (tutorId: string) => {
   const tutor = await prisma.tutorProfile.findUnique({
     where: { id: tutorId, isDeleted: false },

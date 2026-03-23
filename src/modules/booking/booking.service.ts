@@ -2,6 +2,15 @@ import { prisma } from "../../lib/prisma";
 import { userRole } from "../../middlewares/auth";
 
 const createBooking = async (payload: any, userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { emailVerified: true },
+  });
+
+  if (!user?.emailVerified) {
+    throw new Error("Plz verify your email");
+  }
+
   const existTutorProfile = await prisma.tutorProfile.findUnique({
     where: {
       id: payload.tutorId,
