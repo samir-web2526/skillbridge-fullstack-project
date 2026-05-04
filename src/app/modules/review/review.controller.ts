@@ -25,13 +25,35 @@ const getAllReviews = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-const getMyReview = catchAsync(async (req: Request, res: Response) => {
+const getMyGivenReview = catchAsync(async (req: Request, res: Response) => {
     const user = req.user;
-    const result = await reviewService.getMyReview(user?.id as string);
+    const result = await reviewService.getMyGivenReview(user?.id as string);
     sendResponse(res, {
         statusCode: Number(status.OK),
         success: true,
-        message: "My reviews fetched successfully",
+        message: "My given reviews fetched successfully",
+        data: result,
+    });
+});
+
+const getMyReceivedReview = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user;
+    const result = await reviewService.getMyReceivedReview(user?.id as string);
+    sendResponse(res, {
+        statusCode: Number(status.OK),
+        success: true,
+        message: "My received reviews fetched successfully",
+        data: result,
+    });
+});
+
+const getReviewByTutorId = catchAsync(async (req: Request, res: Response) => {
+    const { tutorId } = req.params;
+    const result = await reviewService.getReviewByTutorId(tutorId as string);
+    sendResponse(res, {
+        statusCode: Number(status.OK),
+        success: true,
+        message: "Reviews fetched successfully by tutor id",
         data: result,
     });
 });
@@ -74,7 +96,9 @@ const deleteReview = catchAsync(async (req: Request, res: Response) => {
 export const reviewController = {
     createReview,
     getAllReviews,
-    getMyReview,
+    getMyGivenReview,
+    getMyReceivedReview,
+    getReviewByTutorId,
     getReviewById,
     updateReview,
     deleteReview,

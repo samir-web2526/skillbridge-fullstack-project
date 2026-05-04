@@ -6,9 +6,6 @@ const createReview = z.object({
             message: 'Rating is required',
         }).min(1).max(5),
         comment: z.string().optional(),
-        tutorId: z.string({
-            message: 'Tutor id is required',
-        }),
         bookingId: z.string({
             message: 'Booking id is required',
         }),

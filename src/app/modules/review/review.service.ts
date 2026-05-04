@@ -1,45 +1,66 @@
+import { BookingStatus } from "../../../generated";
 import { prisma } from "../../../lib/prisma";
 import AppError from "../../errorHelpers/AppError";
 import status from "http-status";
+import { IReviewPayload, IReviewUpdatePayload } from "./review.interface";
 
-const createReview = async (payload: any, userId: string) => {
-    const { bookingId, rating, comment, tutorId } = payload;
+const createReview = async (payload: IReviewPayload, userId: string) => {
+  const { bookingId, rating, comment, tutorId } = payload;
 
-    const booking = await prisma.booking.findUnique({
-        where: { id: bookingId },
-    });
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+  });
 
-    if (!booking) {
-        throw new AppError(status.NOT_FOUND, "Booking not found");
-    }
+  if (!booking) {
+    throw new AppError(status.NOT_FOUND, "Booking not found");
+  }
 
-    if (booking.userId !== userId) {
-        throw new AppError(status.FORBIDDEN, "Only the student who booked can review");
-    }
+  if (booking.userId !== userId) {
+    throw new AppError(
+      status.FORBIDDEN,
+      "Only the student who booked can review"
+    );
+  }
 
-    const result = await prisma.review.create({
-        data: {
-            rating,
-            comment,
-            tutorId,
-            userId,
-            bookingId,
-        },
-    });
+  if (booking.status !== BookingStatus.COMPLETED) {
+    throw new AppError(
+      status.BAD_REQUEST,
+      "You can only review completed sessions"
+    );
+  }
 
-    // Update tutor's average rating
-    const tutorReviews = await prisma.review.findMany({
-        where: { tutorId },
-    });
+  const existingReview = await prisma.review.findFirst({
+    where: { bookingId },
+  });
 
-    const averageRating = tutorReviews.reduce((sum, r) => sum + r.rating, 0) / tutorReviews.length;
+  if (existingReview) {
+    throw new AppError(400, "You already reviewed this booking");
+  }
 
-    await prisma.tutorProfile.update({
-        where: { id: tutorId },
-        data: { averageRating },
-    });
+  const result = await prisma.review.create({
+    data: {
+      rating,
+      comment: comment || null,
+      tutorId: booking.tutorId,
+      userId,
+      bookingId,
+    },
+  });
 
-    return result;
+  const tutorReviews = await prisma.review.findMany({
+    where: { tutorId },
+  });
+
+  const averageRating =
+    tutorReviews.reduce((sum, r) => sum + r.rating, 0) /
+    tutorReviews.length;
+
+  await prisma.tutorProfile.update({
+    where: { id: tutorId },
+    data: { averageRating },
+  });
+
+  return result;
 };
 
 const getReviews = async () => {
@@ -62,11 +83,30 @@ const getReviewByTutorId = async (tutorId: string) => {
     return result;
 };
 
-const getMyReview = async (userId: string) => {
+const getMyGivenReview = async (userId: string) => {
     const result = await prisma.review.findMany({
         where: { userId },
         include: {
             tutor: true,
+        },
+    });
+    return result;
+};
+
+const getMyReceivedReview = async (userId: string) => {
+    const tutor = await prisma.tutorProfile.findUnique({
+        where: { userId },
+        select: { id: true },
+    });
+
+    if (!tutor) {
+        throw new AppError(status.NOT_FOUND, "Tutor profile not found");
+    }
+
+    const result = await prisma.review.findMany({
+        where: { tutorId: tutor.id },
+        include: {
+            user: true,
         },
     });
     return result;
@@ -86,24 +126,43 @@ const getReviewById = async (id: string) => {
     return result;
 };
 
-const updateReview = async (id: string, payload: any, userId: string) => {
-    const review = await prisma.review.findUnique({
-        where: { id },
-    });
+const updateReview = async (
+  id: string,
+  payload: IReviewUpdatePayload,
+  userId: string
+) => {
+  const review = await prisma.review.findUnique({
+    where: { id },
+  });
 
-    if (!review) {
-        throw new AppError(status.NOT_FOUND, "Review not found");
-    }
+  if (!review) {
+    throw new AppError(status.NOT_FOUND, "Review not found");
+  }
 
-    if (review.userId !== userId) {
-        throw new AppError(status.FORBIDDEN, "Unauthorized");
-    }
+  if (review.userId !== userId) {
+    throw new AppError(status.FORBIDDEN, "You are not allowed to delete this review");
+  }
 
-    const result = await prisma.review.update({
-        where: { id },
-        data: payload,
-    });
-    return result;
+  const updated = await prisma.review.update({
+    where: { id },
+    data: payload,
+  });
+
+  // 🔥 recalculate average rating
+  const tutorReviews = await prisma.review.findMany({
+    where: { tutorId: review.tutorId },
+  });
+
+  const avg =
+    tutorReviews.reduce((sum, r) => sum + r.rating, 0) /
+    tutorReviews.length;
+
+  await prisma.tutorProfile.update({
+    where: { id: review.tutorId },
+    data: { averageRating: avg },
+  });
+
+  return updated;
 };
 
 const deleteReview = async (id: string, userId: string, role: string) => {
@@ -116,7 +175,7 @@ const deleteReview = async (id: string, userId: string, role: string) => {
     }
 
     if (role !== "ADMIN" && review.userId !== userId) {
-        throw new AppError(status.FORBIDDEN, "Unauthorized");
+        throw new AppError(status.FORBIDDEN, "You are not allowed to delete this review");
     }
 
     const result = await prisma.review.delete({
@@ -129,7 +188,8 @@ export const reviewService = {
     createReview,
     getReviews,
     getReviewByTutorId,
-    getMyReview,
+    getMyGivenReview,
+    getMyReceivedReview,
     getReviewById,
     updateReview,
     deleteReview,
