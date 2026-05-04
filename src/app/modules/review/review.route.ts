@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { reviewController } from "./review.controller";
-import auth, { userRole } from "../../middlewares/auth";
+import { checkAuth } from "../../middlewares/auth";
 
 const router = Router();
 
-router.post("/", auth(userRole.STUDENT), reviewController.createReview);
+router.post("/", checkAuth("STUDENT"), reviewController.createReview);
 router.get("/", reviewController.getAllReviews);
-router.get("/my-reviews", auth(userRole.TUTOR, userRole.STUDENT), reviewController.getMyReview);
+router.get("/my-reviews", checkAuth("TUTOR", "STUDENT"), reviewController.getMyReview);
 router.get("/:id", reviewController.getReviewById);
-router.patch("/:id", auth(userRole.STUDENT), reviewController.updateReview);
-router.delete("/:id", auth(userRole.STUDENT, userRole.ADMIN), reviewController.deleteReview);
+router.patch("/:id", checkAuth("STUDENT"), reviewController.updateReview);
+router.delete("/:id", checkAuth("STUDENT", "ADMIN"), reviewController.deleteReview);
 
 export const reviewRouter = router;

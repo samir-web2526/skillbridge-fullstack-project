@@ -1,6 +1,7 @@
 model TutorProfile {
   id            String    @id @default(uuid())
   bio           String?
+  gender        String?
   hourlyRate    Decimal   @db.Decimal(10, 2)
   experience    Int
   averageRating Float     @default(0)

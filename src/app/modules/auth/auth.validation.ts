@@ -7,6 +7,16 @@ const registerValidationSchema = z.object({
     password: z.string().min(6, 'Password must be at least 6 characters'),
     phone: z.string().optional(),
     image: z.string().url().optional(),
+    role: z.enum(['STUDENT', 'TUTOR']),
+    bio: z.string().optional(),
+    hourlyRate: z.number().optional(),
+    experience: z.number().optional(),
+    categoryId: z.string().optional(),
+    gender: z.string().optional(),
+    dateOfBirth: z.string().optional(),
+    address: z.string().optional(),
+    class: z.string().optional(),
+    group: z.string().optional(),
   }),
 });
 

@@ -34,6 +34,11 @@ export type Payment = $Result.DefaultSelection<Prisma.$PaymentPayload>
  */
 export type Review = $Result.DefaultSelection<Prisma.$ReviewPayload>
 /**
+ * Model StudentProfile
+ * 
+ */
+export type StudentProfile = $Result.DefaultSelection<Prisma.$StudentProfilePayload>
+/**
  * Model TutorProfile
  * 
  */
@@ -70,7 +75,8 @@ export type Role = (typeof Role)[keyof typeof Role]
 
 export const UserStatus: {
   ACTIVE: 'ACTIVE',
-  BANNED: 'BANNED'
+  BANNED: 'BANNED',
+  PENDING: 'PENDING'
 };
 
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
@@ -273,6 +279,16 @@ export class PrismaClient<
     * ```
     */
   get review(): Prisma.ReviewDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.studentProfile`: Exposes CRUD operations for the **StudentProfile** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StudentProfiles
+    * const studentProfiles = await prisma.studentProfile.findMany()
+    * ```
+    */
+  get studentProfile(): Prisma.StudentProfileDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.tutorProfile`: Exposes CRUD operations for the **TutorProfile** model.
@@ -731,6 +747,7 @@ export namespace Prisma {
     Category: 'Category',
     Payment: 'Payment',
     Review: 'Review',
+    StudentProfile: 'StudentProfile',
     TutorProfile: 'TutorProfile',
     User: 'User'
   };
@@ -748,7 +765,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "booking" | "category" | "payment" | "review" | "tutorProfile" | "user"
+      modelProps: "booking" | "category" | "payment" | "review" | "studentProfile" | "tutorProfile" | "user"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1048,6 +1065,80 @@ export namespace Prisma {
           }
         }
       }
+      StudentProfile: {
+        payload: Prisma.$StudentProfilePayload<ExtArgs>
+        fields: Prisma.StudentProfileFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StudentProfileFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentProfilePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StudentProfileFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentProfilePayload>
+          }
+          findFirst: {
+            args: Prisma.StudentProfileFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentProfilePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StudentProfileFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentProfilePayload>
+          }
+          findMany: {
+            args: Prisma.StudentProfileFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentProfilePayload>[]
+          }
+          create: {
+            args: Prisma.StudentProfileCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentProfilePayload>
+          }
+          createMany: {
+            args: Prisma.StudentProfileCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.StudentProfileCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentProfilePayload>[]
+          }
+          delete: {
+            args: Prisma.StudentProfileDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentProfilePayload>
+          }
+          update: {
+            args: Prisma.StudentProfileUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentProfilePayload>
+          }
+          deleteMany: {
+            args: Prisma.StudentProfileDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StudentProfileUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.StudentProfileUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentProfilePayload>[]
+          }
+          upsert: {
+            args: Prisma.StudentProfileUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentProfilePayload>
+          }
+          aggregate: {
+            args: Prisma.StudentProfileAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStudentProfile>
+          }
+          groupBy: {
+            args: Prisma.StudentProfileGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StudentProfileGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.StudentProfileCountArgs<ExtArgs>
+            result: $Utils.Optional<StudentProfileCountAggregateOutputType> | number
+          }
+        }
+      }
       TutorProfile: {
         payload: Prisma.$TutorProfilePayload<ExtArgs>
         fields: Prisma.TutorProfileFieldRefs
@@ -1308,6 +1399,7 @@ export namespace Prisma {
     category?: CategoryOmit
     payment?: PaymentOmit
     review?: ReviewOmit
+    studentProfile?: StudentProfileOmit
     tutorProfile?: TutorProfileOmit
     user?: UserOmit
   }
@@ -6138,6 +6230,1142 @@ export namespace Prisma {
 
 
   /**
+   * Model StudentProfile
+   */
+
+  export type AggregateStudentProfile = {
+    _count: StudentProfileCountAggregateOutputType | null
+    _min: StudentProfileMinAggregateOutputType | null
+    _max: StudentProfileMaxAggregateOutputType | null
+  }
+
+  export type StudentProfileMinAggregateOutputType = {
+    id: string | null
+    gender: string | null
+    dateOfBirth: Date | null
+    address: string | null
+    class: string | null
+    group: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+    userId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StudentProfileMaxAggregateOutputType = {
+    id: string | null
+    gender: string | null
+    dateOfBirth: Date | null
+    address: string | null
+    class: string | null
+    group: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+    userId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StudentProfileCountAggregateOutputType = {
+    id: number
+    gender: number
+    dateOfBirth: number
+    address: number
+    class: number
+    group: number
+    isDeleted: number
+    deletedAt: number
+    userId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type StudentProfileMinAggregateInputType = {
+    id?: true
+    gender?: true
+    dateOfBirth?: true
+    address?: true
+    class?: true
+    group?: true
+    isDeleted?: true
+    deletedAt?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StudentProfileMaxAggregateInputType = {
+    id?: true
+    gender?: true
+    dateOfBirth?: true
+    address?: true
+    class?: true
+    group?: true
+    isDeleted?: true
+    deletedAt?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StudentProfileCountAggregateInputType = {
+    id?: true
+    gender?: true
+    dateOfBirth?: true
+    address?: true
+    class?: true
+    group?: true
+    isDeleted?: true
+    deletedAt?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type StudentProfileAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentProfile to aggregate.
+     */
+    where?: StudentProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentProfiles to fetch.
+     */
+    orderBy?: StudentProfileOrderByWithRelationInput | StudentProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StudentProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StudentProfiles
+    **/
+    _count?: true | StudentProfileCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StudentProfileMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StudentProfileMaxAggregateInputType
+  }
+
+  export type GetStudentProfileAggregateType<T extends StudentProfileAggregateArgs> = {
+        [P in keyof T & keyof AggregateStudentProfile]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStudentProfile[P]>
+      : GetScalarType<T[P], AggregateStudentProfile[P]>
+  }
+
+
+
+
+  export type StudentProfileGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentProfileWhereInput
+    orderBy?: StudentProfileOrderByWithAggregationInput | StudentProfileOrderByWithAggregationInput[]
+    by: StudentProfileScalarFieldEnum[] | StudentProfileScalarFieldEnum
+    having?: StudentProfileScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StudentProfileCountAggregateInputType | true
+    _min?: StudentProfileMinAggregateInputType
+    _max?: StudentProfileMaxAggregateInputType
+  }
+
+  export type StudentProfileGroupByOutputType = {
+    id: string
+    gender: string | null
+    dateOfBirth: Date | null
+    address: string | null
+    class: string | null
+    group: string | null
+    isDeleted: boolean
+    deletedAt: Date | null
+    userId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: StudentProfileCountAggregateOutputType | null
+    _min: StudentProfileMinAggregateOutputType | null
+    _max: StudentProfileMaxAggregateOutputType | null
+  }
+
+  type GetStudentProfileGroupByPayload<T extends StudentProfileGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StudentProfileGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StudentProfileGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StudentProfileGroupByOutputType[P]>
+            : GetScalarType<T[P], StudentProfileGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StudentProfileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    gender?: boolean
+    dateOfBirth?: boolean
+    address?: boolean
+    class?: boolean
+    group?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentProfile"]>
+
+  export type StudentProfileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    gender?: boolean
+    dateOfBirth?: boolean
+    address?: boolean
+    class?: boolean
+    group?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentProfile"]>
+
+  export type StudentProfileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    gender?: boolean
+    dateOfBirth?: boolean
+    address?: boolean
+    class?: boolean
+    group?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentProfile"]>
+
+  export type StudentProfileSelectScalar = {
+    id?: boolean
+    gender?: boolean
+    dateOfBirth?: boolean
+    address?: boolean
+    class?: boolean
+    group?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type StudentProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "gender" | "dateOfBirth" | "address" | "class" | "group" | "isDeleted" | "deletedAt" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["studentProfile"]>
+  export type StudentProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type StudentProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type StudentProfileIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $StudentProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StudentProfile"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      gender: string | null
+      dateOfBirth: Date | null
+      address: string | null
+      class: string | null
+      group: string | null
+      isDeleted: boolean
+      deletedAt: Date | null
+      userId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["studentProfile"]>
+    composites: {}
+  }
+
+  type StudentProfileGetPayload<S extends boolean | null | undefined | StudentProfileDefaultArgs> = $Result.GetResult<Prisma.$StudentProfilePayload, S>
+
+  type StudentProfileCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<StudentProfileFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: StudentProfileCountAggregateInputType | true
+    }
+
+  export interface StudentProfileDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StudentProfile'], meta: { name: 'StudentProfile' } }
+    /**
+     * Find zero or one StudentProfile that matches the filter.
+     * @param {StudentProfileFindUniqueArgs} args - Arguments to find a StudentProfile
+     * @example
+     * // Get one StudentProfile
+     * const studentProfile = await prisma.studentProfile.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StudentProfileFindUniqueArgs>(args: SelectSubset<T, StudentProfileFindUniqueArgs<ExtArgs>>): Prisma__StudentProfileClient<$Result.GetResult<Prisma.$StudentProfilePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one StudentProfile that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {StudentProfileFindUniqueOrThrowArgs} args - Arguments to find a StudentProfile
+     * @example
+     * // Get one StudentProfile
+     * const studentProfile = await prisma.studentProfile.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StudentProfileFindUniqueOrThrowArgs>(args: SelectSubset<T, StudentProfileFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StudentProfileClient<$Result.GetResult<Prisma.$StudentProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentProfile that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentProfileFindFirstArgs} args - Arguments to find a StudentProfile
+     * @example
+     * // Get one StudentProfile
+     * const studentProfile = await prisma.studentProfile.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StudentProfileFindFirstArgs>(args?: SelectSubset<T, StudentProfileFindFirstArgs<ExtArgs>>): Prisma__StudentProfileClient<$Result.GetResult<Prisma.$StudentProfilePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentProfile that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentProfileFindFirstOrThrowArgs} args - Arguments to find a StudentProfile
+     * @example
+     * // Get one StudentProfile
+     * const studentProfile = await prisma.studentProfile.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StudentProfileFindFirstOrThrowArgs>(args?: SelectSubset<T, StudentProfileFindFirstOrThrowArgs<ExtArgs>>): Prisma__StudentProfileClient<$Result.GetResult<Prisma.$StudentProfilePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more StudentProfiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentProfileFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StudentProfiles
+     * const studentProfiles = await prisma.studentProfile.findMany()
+     * 
+     * // Get first 10 StudentProfiles
+     * const studentProfiles = await prisma.studentProfile.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const studentProfileWithIdOnly = await prisma.studentProfile.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StudentProfileFindManyArgs>(args?: SelectSubset<T, StudentProfileFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a StudentProfile.
+     * @param {StudentProfileCreateArgs} args - Arguments to create a StudentProfile.
+     * @example
+     * // Create one StudentProfile
+     * const StudentProfile = await prisma.studentProfile.create({
+     *   data: {
+     *     // ... data to create a StudentProfile
+     *   }
+     * })
+     * 
+     */
+    create<T extends StudentProfileCreateArgs>(args: SelectSubset<T, StudentProfileCreateArgs<ExtArgs>>): Prisma__StudentProfileClient<$Result.GetResult<Prisma.$StudentProfilePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many StudentProfiles.
+     * @param {StudentProfileCreateManyArgs} args - Arguments to create many StudentProfiles.
+     * @example
+     * // Create many StudentProfiles
+     * const studentProfile = await prisma.studentProfile.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StudentProfileCreateManyArgs>(args?: SelectSubset<T, StudentProfileCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StudentProfiles and returns the data saved in the database.
+     * @param {StudentProfileCreateManyAndReturnArgs} args - Arguments to create many StudentProfiles.
+     * @example
+     * // Create many StudentProfiles
+     * const studentProfile = await prisma.studentProfile.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StudentProfiles and only return the `id`
+     * const studentProfileWithIdOnly = await prisma.studentProfile.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StudentProfileCreateManyAndReturnArgs>(args?: SelectSubset<T, StudentProfileCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentProfilePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a StudentProfile.
+     * @param {StudentProfileDeleteArgs} args - Arguments to delete one StudentProfile.
+     * @example
+     * // Delete one StudentProfile
+     * const StudentProfile = await prisma.studentProfile.delete({
+     *   where: {
+     *     // ... filter to delete one StudentProfile
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StudentProfileDeleteArgs>(args: SelectSubset<T, StudentProfileDeleteArgs<ExtArgs>>): Prisma__StudentProfileClient<$Result.GetResult<Prisma.$StudentProfilePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one StudentProfile.
+     * @param {StudentProfileUpdateArgs} args - Arguments to update one StudentProfile.
+     * @example
+     * // Update one StudentProfile
+     * const studentProfile = await prisma.studentProfile.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StudentProfileUpdateArgs>(args: SelectSubset<T, StudentProfileUpdateArgs<ExtArgs>>): Prisma__StudentProfileClient<$Result.GetResult<Prisma.$StudentProfilePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more StudentProfiles.
+     * @param {StudentProfileDeleteManyArgs} args - Arguments to filter StudentProfiles to delete.
+     * @example
+     * // Delete a few StudentProfiles
+     * const { count } = await prisma.studentProfile.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StudentProfileDeleteManyArgs>(args?: SelectSubset<T, StudentProfileDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentProfileUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StudentProfiles
+     * const studentProfile = await prisma.studentProfile.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StudentProfileUpdateManyArgs>(args: SelectSubset<T, StudentProfileUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentProfiles and returns the data updated in the database.
+     * @param {StudentProfileUpdateManyAndReturnArgs} args - Arguments to update many StudentProfiles.
+     * @example
+     * // Update many StudentProfiles
+     * const studentProfile = await prisma.studentProfile.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more StudentProfiles and only return the `id`
+     * const studentProfileWithIdOnly = await prisma.studentProfile.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends StudentProfileUpdateManyAndReturnArgs>(args: SelectSubset<T, StudentProfileUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentProfilePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one StudentProfile.
+     * @param {StudentProfileUpsertArgs} args - Arguments to update or create a StudentProfile.
+     * @example
+     * // Update or create a StudentProfile
+     * const studentProfile = await prisma.studentProfile.upsert({
+     *   create: {
+     *     // ... data to create a StudentProfile
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StudentProfile we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StudentProfileUpsertArgs>(args: SelectSubset<T, StudentProfileUpsertArgs<ExtArgs>>): Prisma__StudentProfileClient<$Result.GetResult<Prisma.$StudentProfilePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of StudentProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentProfileCountArgs} args - Arguments to filter StudentProfiles to count.
+     * @example
+     * // Count the number of StudentProfiles
+     * const count = await prisma.studentProfile.count({
+     *   where: {
+     *     // ... the filter for the StudentProfiles we want to count
+     *   }
+     * })
+    **/
+    count<T extends StudentProfileCountArgs>(
+      args?: Subset<T, StudentProfileCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StudentProfileCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StudentProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentProfileAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StudentProfileAggregateArgs>(args: Subset<T, StudentProfileAggregateArgs>): Prisma.PrismaPromise<GetStudentProfileAggregateType<T>>
+
+    /**
+     * Group by StudentProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentProfileGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StudentProfileGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StudentProfileGroupByArgs['orderBy'] }
+        : { orderBy?: StudentProfileGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StudentProfileGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStudentProfileGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StudentProfile model
+   */
+  readonly fields: StudentProfileFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StudentProfile.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StudentProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StudentProfile model
+   */
+  interface StudentProfileFieldRefs {
+    readonly id: FieldRef<"StudentProfile", 'String'>
+    readonly gender: FieldRef<"StudentProfile", 'String'>
+    readonly dateOfBirth: FieldRef<"StudentProfile", 'DateTime'>
+    readonly address: FieldRef<"StudentProfile", 'String'>
+    readonly class: FieldRef<"StudentProfile", 'String'>
+    readonly group: FieldRef<"StudentProfile", 'String'>
+    readonly isDeleted: FieldRef<"StudentProfile", 'Boolean'>
+    readonly deletedAt: FieldRef<"StudentProfile", 'DateTime'>
+    readonly userId: FieldRef<"StudentProfile", 'String'>
+    readonly createdAt: FieldRef<"StudentProfile", 'DateTime'>
+    readonly updatedAt: FieldRef<"StudentProfile", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StudentProfile findUnique
+   */
+  export type StudentProfileFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentProfile
+     */
+    select?: StudentProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentProfile
+     */
+    omit?: StudentProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentProfile to fetch.
+     */
+    where: StudentProfileWhereUniqueInput
+  }
+
+  /**
+   * StudentProfile findUniqueOrThrow
+   */
+  export type StudentProfileFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentProfile
+     */
+    select?: StudentProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentProfile
+     */
+    omit?: StudentProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentProfile to fetch.
+     */
+    where: StudentProfileWhereUniqueInput
+  }
+
+  /**
+   * StudentProfile findFirst
+   */
+  export type StudentProfileFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentProfile
+     */
+    select?: StudentProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentProfile
+     */
+    omit?: StudentProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentProfile to fetch.
+     */
+    where?: StudentProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentProfiles to fetch.
+     */
+    orderBy?: StudentProfileOrderByWithRelationInput | StudentProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentProfiles.
+     */
+    cursor?: StudentProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentProfiles.
+     */
+    distinct?: StudentProfileScalarFieldEnum | StudentProfileScalarFieldEnum[]
+  }
+
+  /**
+   * StudentProfile findFirstOrThrow
+   */
+  export type StudentProfileFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentProfile
+     */
+    select?: StudentProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentProfile
+     */
+    omit?: StudentProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentProfile to fetch.
+     */
+    where?: StudentProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentProfiles to fetch.
+     */
+    orderBy?: StudentProfileOrderByWithRelationInput | StudentProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentProfiles.
+     */
+    cursor?: StudentProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentProfiles.
+     */
+    distinct?: StudentProfileScalarFieldEnum | StudentProfileScalarFieldEnum[]
+  }
+
+  /**
+   * StudentProfile findMany
+   */
+  export type StudentProfileFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentProfile
+     */
+    select?: StudentProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentProfile
+     */
+    omit?: StudentProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentProfiles to fetch.
+     */
+    where?: StudentProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentProfiles to fetch.
+     */
+    orderBy?: StudentProfileOrderByWithRelationInput | StudentProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StudentProfiles.
+     */
+    cursor?: StudentProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentProfiles.
+     */
+    skip?: number
+    distinct?: StudentProfileScalarFieldEnum | StudentProfileScalarFieldEnum[]
+  }
+
+  /**
+   * StudentProfile create
+   */
+  export type StudentProfileCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentProfile
+     */
+    select?: StudentProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentProfile
+     */
+    omit?: StudentProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StudentProfile.
+     */
+    data: XOR<StudentProfileCreateInput, StudentProfileUncheckedCreateInput>
+  }
+
+  /**
+   * StudentProfile createMany
+   */
+  export type StudentProfileCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StudentProfiles.
+     */
+    data: StudentProfileCreateManyInput | StudentProfileCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StudentProfile createManyAndReturn
+   */
+  export type StudentProfileCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentProfile
+     */
+    select?: StudentProfileSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentProfile
+     */
+    omit?: StudentProfileOmit<ExtArgs> | null
+    /**
+     * The data used to create many StudentProfiles.
+     */
+    data: StudentProfileCreateManyInput | StudentProfileCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentProfileIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentProfile update
+   */
+  export type StudentProfileUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentProfile
+     */
+    select?: StudentProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentProfile
+     */
+    omit?: StudentProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StudentProfile.
+     */
+    data: XOR<StudentProfileUpdateInput, StudentProfileUncheckedUpdateInput>
+    /**
+     * Choose, which StudentProfile to update.
+     */
+    where: StudentProfileWhereUniqueInput
+  }
+
+  /**
+   * StudentProfile updateMany
+   */
+  export type StudentProfileUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StudentProfiles.
+     */
+    data: XOR<StudentProfileUpdateManyMutationInput, StudentProfileUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentProfiles to update
+     */
+    where?: StudentProfileWhereInput
+    /**
+     * Limit how many StudentProfiles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentProfile updateManyAndReturn
+   */
+  export type StudentProfileUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentProfile
+     */
+    select?: StudentProfileSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentProfile
+     */
+    omit?: StudentProfileOmit<ExtArgs> | null
+    /**
+     * The data used to update StudentProfiles.
+     */
+    data: XOR<StudentProfileUpdateManyMutationInput, StudentProfileUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentProfiles to update
+     */
+    where?: StudentProfileWhereInput
+    /**
+     * Limit how many StudentProfiles to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentProfileIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentProfile upsert
+   */
+  export type StudentProfileUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentProfile
+     */
+    select?: StudentProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentProfile
+     */
+    omit?: StudentProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentProfileInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StudentProfile to update in case it exists.
+     */
+    where: StudentProfileWhereUniqueInput
+    /**
+     * In case the StudentProfile found by the `where` argument doesn't exist, create a new StudentProfile with this data.
+     */
+    create: XOR<StudentProfileCreateInput, StudentProfileUncheckedCreateInput>
+    /**
+     * In case the StudentProfile was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StudentProfileUpdateInput, StudentProfileUncheckedUpdateInput>
+  }
+
+  /**
+   * StudentProfile delete
+   */
+  export type StudentProfileDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentProfile
+     */
+    select?: StudentProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentProfile
+     */
+    omit?: StudentProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentProfileInclude<ExtArgs> | null
+    /**
+     * Filter which StudentProfile to delete.
+     */
+    where: StudentProfileWhereUniqueInput
+  }
+
+  /**
+   * StudentProfile deleteMany
+   */
+  export type StudentProfileDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentProfiles to delete
+     */
+    where?: StudentProfileWhereInput
+    /**
+     * Limit how many StudentProfiles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentProfile without action
+   */
+  export type StudentProfileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentProfile
+     */
+    select?: StudentProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentProfile
+     */
+    omit?: StudentProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentProfileInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model TutorProfile
    */
 
@@ -6166,6 +7394,7 @@ export namespace Prisma {
   export type TutorProfileMinAggregateOutputType = {
     id: string | null
     bio: string | null
+    gender: string | null
     hourlyRate: Decimal | null
     experience: number | null
     averageRating: number | null
@@ -6182,6 +7411,7 @@ export namespace Prisma {
   export type TutorProfileMaxAggregateOutputType = {
     id: string | null
     bio: string | null
+    gender: string | null
     hourlyRate: Decimal | null
     experience: number | null
     averageRating: number | null
@@ -6198,6 +7428,7 @@ export namespace Prisma {
   export type TutorProfileCountAggregateOutputType = {
     id: number
     bio: number
+    gender: number
     hourlyRate: number
     experience: number
     averageRating: number
@@ -6230,6 +7461,7 @@ export namespace Prisma {
   export type TutorProfileMinAggregateInputType = {
     id?: true
     bio?: true
+    gender?: true
     hourlyRate?: true
     experience?: true
     averageRating?: true
@@ -6246,6 +7478,7 @@ export namespace Prisma {
   export type TutorProfileMaxAggregateInputType = {
     id?: true
     bio?: true
+    gender?: true
     hourlyRate?: true
     experience?: true
     averageRating?: true
@@ -6262,6 +7495,7 @@ export namespace Prisma {
   export type TutorProfileCountAggregateInputType = {
     id?: true
     bio?: true
+    gender?: true
     hourlyRate?: true
     experience?: true
     averageRating?: true
@@ -6365,6 +7599,7 @@ export namespace Prisma {
   export type TutorProfileGroupByOutputType = {
     id: string
     bio: string | null
+    gender: string | null
     hourlyRate: Decimal
     experience: number
     averageRating: number
@@ -6400,6 +7635,7 @@ export namespace Prisma {
   export type TutorProfileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     bio?: boolean
+    gender?: boolean
     hourlyRate?: boolean
     experience?: boolean
     averageRating?: boolean
@@ -6421,6 +7657,7 @@ export namespace Prisma {
   export type TutorProfileSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     bio?: boolean
+    gender?: boolean
     hourlyRate?: boolean
     experience?: boolean
     averageRating?: boolean
@@ -6439,6 +7676,7 @@ export namespace Prisma {
   export type TutorProfileSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     bio?: boolean
+    gender?: boolean
     hourlyRate?: boolean
     experience?: boolean
     averageRating?: boolean
@@ -6457,6 +7695,7 @@ export namespace Prisma {
   export type TutorProfileSelectScalar = {
     id?: boolean
     bio?: boolean
+    gender?: boolean
     hourlyRate?: boolean
     experience?: boolean
     averageRating?: boolean
@@ -6470,7 +7709,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type TutorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bio" | "hourlyRate" | "experience" | "averageRating" | "isAvailable" | "isDeleted" | "deletedAt" | "version" | "categoryId" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["tutorProfile"]>
+  export type TutorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bio" | "gender" | "hourlyRate" | "experience" | "averageRating" | "isAvailable" | "isDeleted" | "deletedAt" | "version" | "categoryId" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["tutorProfile"]>
   export type TutorProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -6498,6 +7737,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       bio: string | null
+      gender: string | null
       hourlyRate: Prisma.Decimal
       experience: number
       averageRating: number
@@ -6938,6 +8178,7 @@ export namespace Prisma {
   interface TutorProfileFieldRefs {
     readonly id: FieldRef<"TutorProfile", 'String'>
     readonly bio: FieldRef<"TutorProfile", 'String'>
+    readonly gender: FieldRef<"TutorProfile", 'String'>
     readonly hourlyRate: FieldRef<"TutorProfile", 'Decimal'>
     readonly experience: FieldRef<"TutorProfile", 'Int'>
     readonly averageRating: FieldRef<"TutorProfile", 'Float'>
@@ -7640,6 +8881,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     tutor?: boolean | User$tutorArgs<ExtArgs>
+    student?: boolean | User$studentArgs<ExtArgs>
     booking?: boolean | User$bookingArgs<ExtArgs>
     payment?: boolean | User$paymentArgs<ExtArgs>
     review?: boolean | User$reviewArgs<ExtArgs>
@@ -7697,6 +8939,7 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "emailVerified" | "role" | "image" | "phone" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tutor?: boolean | User$tutorArgs<ExtArgs>
+    student?: boolean | User$studentArgs<ExtArgs>
     booking?: boolean | User$bookingArgs<ExtArgs>
     payment?: boolean | User$paymentArgs<ExtArgs>
     review?: boolean | User$reviewArgs<ExtArgs>
@@ -7709,6 +8952,7 @@ export namespace Prisma {
     name: "User"
     objects: {
       tutor: Prisma.$TutorProfilePayload<ExtArgs> | null
+      student: Prisma.$StudentProfilePayload<ExtArgs> | null
       booking: Prisma.$BookingPayload<ExtArgs>[]
       payment: Prisma.$PaymentPayload<ExtArgs>[]
       review: Prisma.$ReviewPayload<ExtArgs>[]
@@ -8122,6 +9366,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     tutor<T extends User$tutorArgs<ExtArgs> = {}>(args?: Subset<T, User$tutorArgs<ExtArgs>>): Prisma__TutorProfileClient<$Result.GetResult<Prisma.$TutorProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    student<T extends User$studentArgs<ExtArgs> = {}>(args?: Subset<T, User$studentArgs<ExtArgs>>): Prisma__StudentProfileClient<$Result.GetResult<Prisma.$StudentProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     booking<T extends User$bookingArgs<ExtArgs> = {}>(args?: Subset<T, User$bookingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     payment<T extends User$paymentArgs<ExtArgs> = {}>(args?: Subset<T, User$paymentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     review<T extends User$reviewArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -8574,6 +9819,25 @@ export namespace Prisma {
   }
 
   /**
+   * User.student
+   */
+  export type User$studentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentProfile
+     */
+    select?: StudentProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentProfile
+     */
+    omit?: StudentProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentProfileInclude<ExtArgs> | null
+    where?: StudentProfileWhereInput
+  }
+
+  /**
    * User.booking
    */
   export type User$bookingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8738,9 +10002,27 @@ export namespace Prisma {
   export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
 
 
+  export const StudentProfileScalarFieldEnum: {
+    id: 'id',
+    gender: 'gender',
+    dateOfBirth: 'dateOfBirth',
+    address: 'address',
+    class: 'class',
+    group: 'group',
+    isDeleted: 'isDeleted',
+    deletedAt: 'deletedAt',
+    userId: 'userId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type StudentProfileScalarFieldEnum = (typeof StudentProfileScalarFieldEnum)[keyof typeof StudentProfileScalarFieldEnum]
+
+
   export const TutorProfileScalarFieldEnum: {
     id: 'id',
     bio: 'bio',
+    gender: 'gender',
     hourlyRate: 'hourlyRate',
     experience: 'experience',
     averageRating: 'averageRating',
@@ -9310,12 +10592,98 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Review"> | Date | string
   }
 
+  export type StudentProfileWhereInput = {
+    AND?: StudentProfileWhereInput | StudentProfileWhereInput[]
+    OR?: StudentProfileWhereInput[]
+    NOT?: StudentProfileWhereInput | StudentProfileWhereInput[]
+    id?: StringFilter<"StudentProfile"> | string
+    gender?: StringNullableFilter<"StudentProfile"> | string | null
+    dateOfBirth?: DateTimeNullableFilter<"StudentProfile"> | Date | string | null
+    address?: StringNullableFilter<"StudentProfile"> | string | null
+    class?: StringNullableFilter<"StudentProfile"> | string | null
+    group?: StringNullableFilter<"StudentProfile"> | string | null
+    isDeleted?: BoolFilter<"StudentProfile"> | boolean
+    deletedAt?: DateTimeNullableFilter<"StudentProfile"> | Date | string | null
+    userId?: StringFilter<"StudentProfile"> | string
+    createdAt?: DateTimeFilter<"StudentProfile"> | Date | string
+    updatedAt?: DateTimeFilter<"StudentProfile"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type StudentProfileOrderByWithRelationInput = {
+    id?: SortOrder
+    gender?: SortOrderInput | SortOrder
+    dateOfBirth?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    class?: SortOrderInput | SortOrder
+    group?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type StudentProfileWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    AND?: StudentProfileWhereInput | StudentProfileWhereInput[]
+    OR?: StudentProfileWhereInput[]
+    NOT?: StudentProfileWhereInput | StudentProfileWhereInput[]
+    gender?: StringNullableFilter<"StudentProfile"> | string | null
+    dateOfBirth?: DateTimeNullableFilter<"StudentProfile"> | Date | string | null
+    address?: StringNullableFilter<"StudentProfile"> | string | null
+    class?: StringNullableFilter<"StudentProfile"> | string | null
+    group?: StringNullableFilter<"StudentProfile"> | string | null
+    isDeleted?: BoolFilter<"StudentProfile"> | boolean
+    deletedAt?: DateTimeNullableFilter<"StudentProfile"> | Date | string | null
+    createdAt?: DateTimeFilter<"StudentProfile"> | Date | string
+    updatedAt?: DateTimeFilter<"StudentProfile"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId">
+
+  export type StudentProfileOrderByWithAggregationInput = {
+    id?: SortOrder
+    gender?: SortOrderInput | SortOrder
+    dateOfBirth?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    class?: SortOrderInput | SortOrder
+    group?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: StudentProfileCountOrderByAggregateInput
+    _max?: StudentProfileMaxOrderByAggregateInput
+    _min?: StudentProfileMinOrderByAggregateInput
+  }
+
+  export type StudentProfileScalarWhereWithAggregatesInput = {
+    AND?: StudentProfileScalarWhereWithAggregatesInput | StudentProfileScalarWhereWithAggregatesInput[]
+    OR?: StudentProfileScalarWhereWithAggregatesInput[]
+    NOT?: StudentProfileScalarWhereWithAggregatesInput | StudentProfileScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"StudentProfile"> | string
+    gender?: StringNullableWithAggregatesFilter<"StudentProfile"> | string | null
+    dateOfBirth?: DateTimeNullableWithAggregatesFilter<"StudentProfile"> | Date | string | null
+    address?: StringNullableWithAggregatesFilter<"StudentProfile"> | string | null
+    class?: StringNullableWithAggregatesFilter<"StudentProfile"> | string | null
+    group?: StringNullableWithAggregatesFilter<"StudentProfile"> | string | null
+    isDeleted?: BoolWithAggregatesFilter<"StudentProfile"> | boolean
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"StudentProfile"> | Date | string | null
+    userId?: StringWithAggregatesFilter<"StudentProfile"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"StudentProfile"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"StudentProfile"> | Date | string
+  }
+
   export type TutorProfileWhereInput = {
     AND?: TutorProfileWhereInput | TutorProfileWhereInput[]
     OR?: TutorProfileWhereInput[]
     NOT?: TutorProfileWhereInput | TutorProfileWhereInput[]
     id?: StringFilter<"TutorProfile"> | string
     bio?: StringNullableFilter<"TutorProfile"> | string | null
+    gender?: StringNullableFilter<"TutorProfile"> | string | null
     hourlyRate?: DecimalFilter<"TutorProfile"> | Decimal | DecimalJsLike | number | string
     experience?: IntFilter<"TutorProfile"> | number
     averageRating?: FloatFilter<"TutorProfile"> | number
@@ -9336,6 +10704,7 @@ export namespace Prisma {
   export type TutorProfileOrderByWithRelationInput = {
     id?: SortOrder
     bio?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
     hourlyRate?: SortOrder
     experience?: SortOrder
     averageRating?: SortOrder
@@ -9360,6 +10729,7 @@ export namespace Prisma {
     OR?: TutorProfileWhereInput[]
     NOT?: TutorProfileWhereInput | TutorProfileWhereInput[]
     bio?: StringNullableFilter<"TutorProfile"> | string | null
+    gender?: StringNullableFilter<"TutorProfile"> | string | null
     hourlyRate?: DecimalFilter<"TutorProfile"> | Decimal | DecimalJsLike | number | string
     experience?: IntFilter<"TutorProfile"> | number
     averageRating?: FloatFilter<"TutorProfile"> | number
@@ -9379,6 +10749,7 @@ export namespace Prisma {
   export type TutorProfileOrderByWithAggregationInput = {
     id?: SortOrder
     bio?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
     hourlyRate?: SortOrder
     experience?: SortOrder
     averageRating?: SortOrder
@@ -9403,6 +10774,7 @@ export namespace Prisma {
     NOT?: TutorProfileScalarWhereWithAggregatesInput | TutorProfileScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"TutorProfile"> | string
     bio?: StringNullableWithAggregatesFilter<"TutorProfile"> | string | null
+    gender?: StringNullableWithAggregatesFilter<"TutorProfile"> | string | null
     hourlyRate?: DecimalWithAggregatesFilter<"TutorProfile"> | Decimal | DecimalJsLike | number | string
     experience?: IntWithAggregatesFilter<"TutorProfile"> | number
     averageRating?: FloatWithAggregatesFilter<"TutorProfile"> | number
@@ -9434,6 +10806,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     tutor?: XOR<TutorProfileNullableScalarRelationFilter, TutorProfileWhereInput> | null
+    student?: XOR<StudentProfileNullableScalarRelationFilter, StudentProfileWhereInput> | null
     booking?: BookingListRelationFilter
     payment?: PaymentListRelationFilter
     review?: ReviewListRelationFilter
@@ -9454,6 +10827,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tutor?: TutorProfileOrderByWithRelationInput
+    student?: StudentProfileOrderByWithRelationInput
     booking?: BookingOrderByRelationAggregateInput
     payment?: PaymentOrderByRelationAggregateInput
     review?: ReviewOrderByRelationAggregateInput
@@ -9477,6 +10851,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     tutor?: XOR<TutorProfileNullableScalarRelationFilter, TutorProfileWhereInput> | null
+    student?: XOR<StudentProfileNullableScalarRelationFilter, StudentProfileWhereInput> | null
     booking?: BookingListRelationFilter
     payment?: PaymentListRelationFilter
     review?: ReviewListRelationFilter
@@ -9861,9 +11236,107 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type StudentProfileCreateInput = {
+    id?: string
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    address?: string | null
+    class?: string | null
+    group?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutStudentInput
+  }
+
+  export type StudentProfileUncheckedCreateInput = {
+    id?: string
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    address?: string | null
+    class?: string | null
+    group?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentProfileUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    class?: NullableStringFieldUpdateOperationsInput | string | null
+    group?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutStudentNestedInput
+  }
+
+  export type StudentProfileUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    class?: NullableStringFieldUpdateOperationsInput | string | null
+    group?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentProfileCreateManyInput = {
+    id?: string
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    address?: string | null
+    class?: string | null
+    group?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentProfileUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    class?: NullableStringFieldUpdateOperationsInput | string | null
+    group?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentProfileUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    class?: NullableStringFieldUpdateOperationsInput | string | null
+    group?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TutorProfileCreateInput = {
     id?: string
     bio?: string | null
+    gender?: string | null
     hourlyRate: Decimal | DecimalJsLike | number | string
     experience: number
     averageRating?: number
@@ -9882,6 +11355,7 @@ export namespace Prisma {
   export type TutorProfileUncheckedCreateInput = {
     id?: string
     bio?: string | null
+    gender?: string | null
     hourlyRate: Decimal | DecimalJsLike | number | string
     experience: number
     averageRating?: number
@@ -9900,6 +11374,7 @@ export namespace Prisma {
   export type TutorProfileUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     hourlyRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
@@ -9918,6 +11393,7 @@ export namespace Prisma {
   export type TutorProfileUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     hourlyRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
@@ -9936,6 +11412,7 @@ export namespace Prisma {
   export type TutorProfileCreateManyInput = {
     id?: string
     bio?: string | null
+    gender?: string | null
     hourlyRate: Decimal | DecimalJsLike | number | string
     experience: number
     averageRating?: number
@@ -9952,6 +11429,7 @@ export namespace Prisma {
   export type TutorProfileUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     hourlyRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
@@ -9966,6 +11444,7 @@ export namespace Prisma {
   export type TutorProfileUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     hourlyRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
@@ -9994,6 +11473,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tutor?: TutorProfileCreateNestedOneWithoutUserInput
+    student?: StudentProfileCreateNestedOneWithoutUserInput
     booking?: BookingCreateNestedManyWithoutUserInput
     payment?: PaymentCreateNestedManyWithoutUserInput
     review?: ReviewCreateNestedManyWithoutUserInput
@@ -10014,6 +11494,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tutor?: TutorProfileUncheckedCreateNestedOneWithoutUserInput
+    student?: StudentProfileUncheckedCreateNestedOneWithoutUserInput
     booking?: BookingUncheckedCreateNestedManyWithoutUserInput
     payment?: PaymentUncheckedCreateNestedManyWithoutUserInput
     review?: ReviewUncheckedCreateNestedManyWithoutUserInput
@@ -10034,6 +11515,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutor?: TutorProfileUpdateOneWithoutUserNestedInput
+    student?: StudentProfileUpdateOneWithoutUserNestedInput
     booking?: BookingUpdateManyWithoutUserNestedInput
     payment?: PaymentUpdateManyWithoutUserNestedInput
     review?: ReviewUpdateManyWithoutUserNestedInput
@@ -10054,6 +11536,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutor?: TutorProfileUncheckedUpdateOneWithoutUserNestedInput
+    student?: StudentProfileUncheckedUpdateOneWithoutUserNestedInput
     booking?: BookingUncheckedUpdateManyWithoutUserNestedInput
     payment?: PaymentUncheckedUpdateManyWithoutUserNestedInput
     review?: ReviewUncheckedUpdateManyWithoutUserNestedInput
@@ -10596,6 +12079,48 @@ export namespace Prisma {
     rating?: SortOrder
   }
 
+  export type StudentProfileCountOrderByAggregateInput = {
+    id?: SortOrder
+    gender?: SortOrder
+    dateOfBirth?: SortOrder
+    address?: SortOrder
+    class?: SortOrder
+    group?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentProfileMaxOrderByAggregateInput = {
+    id?: SortOrder
+    gender?: SortOrder
+    dateOfBirth?: SortOrder
+    address?: SortOrder
+    class?: SortOrder
+    group?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentProfileMinOrderByAggregateInput = {
+    id?: SortOrder
+    gender?: SortOrder
+    dateOfBirth?: SortOrder
+    address?: SortOrder
+    class?: SortOrder
+    group?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type FloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -10635,6 +12160,7 @@ export namespace Prisma {
   export type TutorProfileCountOrderByAggregateInput = {
     id?: SortOrder
     bio?: SortOrder
+    gender?: SortOrder
     hourlyRate?: SortOrder
     experience?: SortOrder
     averageRating?: SortOrder
@@ -10658,6 +12184,7 @@ export namespace Prisma {
   export type TutorProfileMaxOrderByAggregateInput = {
     id?: SortOrder
     bio?: SortOrder
+    gender?: SortOrder
     hourlyRate?: SortOrder
     experience?: SortOrder
     averageRating?: SortOrder
@@ -10674,6 +12201,7 @@ export namespace Prisma {
   export type TutorProfileMinOrderByAggregateInput = {
     id?: SortOrder
     bio?: SortOrder
+    gender?: SortOrder
     hourlyRate?: SortOrder
     experience?: SortOrder
     averageRating?: SortOrder
@@ -10727,6 +12255,11 @@ export namespace Prisma {
   export type TutorProfileNullableScalarRelationFilter = {
     is?: TutorProfileWhereInput | null
     isNot?: TutorProfileWhereInput | null
+  }
+
+  export type StudentProfileNullableScalarRelationFilter = {
+    is?: StudentProfileWhereInput | null
+    isNot?: StudentProfileWhereInput | null
   }
 
   export type PaymentListRelationFilter = {
@@ -11059,6 +12592,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewInput, UserUpdateWithoutReviewInput>, UserUncheckedUpdateWithoutReviewInput>
   }
 
+  export type UserCreateNestedOneWithoutStudentInput = {
+    create?: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
+    connectOrCreate?: UserCreateOrConnectWithoutStudentInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutStudentNestedInput = {
+    create?: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
+    connectOrCreate?: UserCreateOrConnectWithoutStudentInput
+    upsert?: UserUpsertWithoutStudentInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutStudentInput, UserUpdateWithoutStudentInput>, UserUncheckedUpdateWithoutStudentInput>
+  }
+
   export type CategoryCreateNestedOneWithoutTutorInput = {
     create?: XOR<CategoryCreateWithoutTutorInput, CategoryUncheckedCreateWithoutTutorInput>
     connectOrCreate?: CategoryCreateOrConnectWithoutTutorInput
@@ -11185,6 +12732,12 @@ export namespace Prisma {
     connect?: TutorProfileWhereUniqueInput
   }
 
+  export type StudentProfileCreateNestedOneWithoutUserInput = {
+    create?: XOR<StudentProfileCreateWithoutUserInput, StudentProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: StudentProfileCreateOrConnectWithoutUserInput
+    connect?: StudentProfileWhereUniqueInput
+  }
+
   export type BookingCreateNestedManyWithoutUserInput = {
     create?: XOR<BookingCreateWithoutUserInput, BookingUncheckedCreateWithoutUserInput> | BookingCreateWithoutUserInput[] | BookingUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BookingCreateOrConnectWithoutUserInput | BookingCreateOrConnectWithoutUserInput[]
@@ -11210,6 +12763,12 @@ export namespace Prisma {
     create?: XOR<TutorProfileCreateWithoutUserInput, TutorProfileUncheckedCreateWithoutUserInput>
     connectOrCreate?: TutorProfileCreateOrConnectWithoutUserInput
     connect?: TutorProfileWhereUniqueInput
+  }
+
+  export type StudentProfileUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<StudentProfileCreateWithoutUserInput, StudentProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: StudentProfileCreateOrConnectWithoutUserInput
+    connect?: StudentProfileWhereUniqueInput
   }
 
   export type BookingUncheckedCreateNestedManyWithoutUserInput = {
@@ -11249,6 +12808,16 @@ export namespace Prisma {
     delete?: TutorProfileWhereInput | boolean
     connect?: TutorProfileWhereUniqueInput
     update?: XOR<XOR<TutorProfileUpdateToOneWithWhereWithoutUserInput, TutorProfileUpdateWithoutUserInput>, TutorProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type StudentProfileUpdateOneWithoutUserNestedInput = {
+    create?: XOR<StudentProfileCreateWithoutUserInput, StudentProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: StudentProfileCreateOrConnectWithoutUserInput
+    upsert?: StudentProfileUpsertWithoutUserInput
+    disconnect?: StudentProfileWhereInput | boolean
+    delete?: StudentProfileWhereInput | boolean
+    connect?: StudentProfileWhereUniqueInput
+    update?: XOR<XOR<StudentProfileUpdateToOneWithWhereWithoutUserInput, StudentProfileUpdateWithoutUserInput>, StudentProfileUncheckedUpdateWithoutUserInput>
   }
 
   export type BookingUpdateManyWithoutUserNestedInput = {
@@ -11301,6 +12870,16 @@ export namespace Prisma {
     delete?: TutorProfileWhereInput | boolean
     connect?: TutorProfileWhereUniqueInput
     update?: XOR<XOR<TutorProfileUpdateToOneWithWhereWithoutUserInput, TutorProfileUpdateWithoutUserInput>, TutorProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type StudentProfileUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<StudentProfileCreateWithoutUserInput, StudentProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: StudentProfileCreateOrConnectWithoutUserInput
+    upsert?: StudentProfileUpsertWithoutUserInput
+    disconnect?: StudentProfileWhereInput | boolean
+    delete?: StudentProfileWhereInput | boolean
+    connect?: StudentProfileWhereUniqueInput
+    update?: XOR<XOR<StudentProfileUpdateToOneWithWhereWithoutUserInput, StudentProfileUpdateWithoutUserInput>, StudentProfileUncheckedUpdateWithoutUserInput>
   }
 
   export type BookingUncheckedUpdateManyWithoutUserNestedInput = {
@@ -11673,6 +13252,7 @@ export namespace Prisma {
   export type TutorProfileCreateWithoutBookingInput = {
     id?: string
     bio?: string | null
+    gender?: string | null
     hourlyRate: Decimal | DecimalJsLike | number | string
     experience: number
     averageRating?: number
@@ -11690,6 +13270,7 @@ export namespace Prisma {
   export type TutorProfileUncheckedCreateWithoutBookingInput = {
     id?: string
     bio?: string | null
+    gender?: string | null
     hourlyRate: Decimal | DecimalJsLike | number | string
     experience: number
     averageRating?: number
@@ -11724,6 +13305,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tutor?: TutorProfileCreateNestedOneWithoutUserInput
+    student?: StudentProfileCreateNestedOneWithoutUserInput
     payment?: PaymentCreateNestedManyWithoutUserInput
     review?: ReviewCreateNestedManyWithoutUserInput
   }
@@ -11743,6 +13325,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tutor?: TutorProfileUncheckedCreateNestedOneWithoutUserInput
+    student?: StudentProfileUncheckedCreateNestedOneWithoutUserInput
     payment?: PaymentUncheckedCreateNestedManyWithoutUserInput
     review?: ReviewUncheckedCreateNestedManyWithoutUserInput
   }
@@ -11826,6 +13409,7 @@ export namespace Prisma {
   export type TutorProfileUpdateWithoutBookingInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     hourlyRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
@@ -11843,6 +13427,7 @@ export namespace Prisma {
   export type TutorProfileUncheckedUpdateWithoutBookingInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     hourlyRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
@@ -11883,6 +13468,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutor?: TutorProfileUpdateOneWithoutUserNestedInput
+    student?: StudentProfileUpdateOneWithoutUserNestedInput
     payment?: PaymentUpdateManyWithoutUserNestedInput
     review?: ReviewUpdateManyWithoutUserNestedInput
   }
@@ -11902,6 +13488,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutor?: TutorProfileUncheckedUpdateOneWithoutUserNestedInput
+    student?: StudentProfileUncheckedUpdateOneWithoutUserNestedInput
     payment?: PaymentUncheckedUpdateManyWithoutUserNestedInput
     review?: ReviewUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -11981,6 +13568,7 @@ export namespace Prisma {
   export type TutorProfileCreateWithoutCategoryInput = {
     id?: string
     bio?: string | null
+    gender?: string | null
     hourlyRate: Decimal | DecimalJsLike | number | string
     experience: number
     averageRating?: number
@@ -11998,6 +13586,7 @@ export namespace Prisma {
   export type TutorProfileUncheckedCreateWithoutCategoryInput = {
     id?: string
     bio?: string | null
+    gender?: string | null
     hourlyRate: Decimal | DecimalJsLike | number | string
     experience: number
     averageRating?: number
@@ -12044,6 +13633,7 @@ export namespace Prisma {
     NOT?: TutorProfileScalarWhereInput | TutorProfileScalarWhereInput[]
     id?: StringFilter<"TutorProfile"> | string
     bio?: StringNullableFilter<"TutorProfile"> | string | null
+    gender?: StringNullableFilter<"TutorProfile"> | string | null
     hourlyRate?: DecimalFilter<"TutorProfile"> | Decimal | DecimalJsLike | number | string
     experience?: IntFilter<"TutorProfile"> | number
     averageRating?: FloatFilter<"TutorProfile"> | number
@@ -12109,6 +13699,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tutor?: TutorProfileCreateNestedOneWithoutUserInput
+    student?: StudentProfileCreateNestedOneWithoutUserInput
     booking?: BookingCreateNestedManyWithoutUserInput
     review?: ReviewCreateNestedManyWithoutUserInput
   }
@@ -12128,6 +13719,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tutor?: TutorProfileUncheckedCreateNestedOneWithoutUserInput
+    student?: StudentProfileUncheckedCreateNestedOneWithoutUserInput
     booking?: BookingUncheckedCreateNestedManyWithoutUserInput
     review?: ReviewUncheckedCreateNestedManyWithoutUserInput
   }
@@ -12206,6 +13798,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutor?: TutorProfileUpdateOneWithoutUserNestedInput
+    student?: StudentProfileUpdateOneWithoutUserNestedInput
     booking?: BookingUpdateManyWithoutUserNestedInput
     review?: ReviewUpdateManyWithoutUserNestedInput
   }
@@ -12225,6 +13818,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutor?: TutorProfileUncheckedUpdateOneWithoutUserNestedInput
+    student?: StudentProfileUncheckedUpdateOneWithoutUserNestedInput
     booking?: BookingUncheckedUpdateManyWithoutUserNestedInput
     review?: ReviewUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -12269,6 +13863,7 @@ export namespace Prisma {
   export type TutorProfileCreateWithoutReviewInput = {
     id?: string
     bio?: string | null
+    gender?: string | null
     hourlyRate: Decimal | DecimalJsLike | number | string
     experience: number
     averageRating?: number
@@ -12286,6 +13881,7 @@ export namespace Prisma {
   export type TutorProfileUncheckedCreateWithoutReviewInput = {
     id?: string
     bio?: string | null
+    gender?: string | null
     hourlyRate: Decimal | DecimalJsLike | number | string
     experience: number
     averageRating?: number
@@ -12320,6 +13916,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tutor?: TutorProfileCreateNestedOneWithoutUserInput
+    student?: StudentProfileCreateNestedOneWithoutUserInput
     booking?: BookingCreateNestedManyWithoutUserInput
     payment?: PaymentCreateNestedManyWithoutUserInput
   }
@@ -12339,6 +13936,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tutor?: TutorProfileUncheckedCreateNestedOneWithoutUserInput
+    student?: StudentProfileUncheckedCreateNestedOneWithoutUserInput
     booking?: BookingUncheckedCreateNestedManyWithoutUserInput
     payment?: PaymentUncheckedCreateNestedManyWithoutUserInput
   }
@@ -12405,6 +14003,7 @@ export namespace Prisma {
   export type TutorProfileUpdateWithoutReviewInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     hourlyRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
@@ -12422,6 +14021,7 @@ export namespace Prisma {
   export type TutorProfileUncheckedUpdateWithoutReviewInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     hourlyRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
@@ -12462,6 +14062,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutor?: TutorProfileUpdateOneWithoutUserNestedInput
+    student?: StudentProfileUpdateOneWithoutUserNestedInput
     booking?: BookingUpdateManyWithoutUserNestedInput
     payment?: PaymentUpdateManyWithoutUserNestedInput
   }
@@ -12481,8 +14082,105 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutor?: TutorProfileUncheckedUpdateOneWithoutUserNestedInput
+    student?: StudentProfileUncheckedUpdateOneWithoutUserNestedInput
     booking?: BookingUncheckedUpdateManyWithoutUserNestedInput
     payment?: PaymentUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutStudentInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    emailVerified?: boolean
+    role?: $Enums.Role
+    image?: string | null
+    phone?: string | null
+    status?: $Enums.UserStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tutor?: TutorProfileCreateNestedOneWithoutUserInput
+    booking?: BookingCreateNestedManyWithoutUserInput
+    payment?: PaymentCreateNestedManyWithoutUserInput
+    review?: ReviewCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutStudentInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    emailVerified?: boolean
+    role?: $Enums.Role
+    image?: string | null
+    phone?: string | null
+    status?: $Enums.UserStatus
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tutor?: TutorProfileUncheckedCreateNestedOneWithoutUserInput
+    booking?: BookingUncheckedCreateNestedManyWithoutUserInput
+    payment?: PaymentUncheckedCreateNestedManyWithoutUserInput
+    review?: ReviewUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutStudentInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
+  }
+
+  export type UserUpsertWithoutStudentInput = {
+    update: XOR<UserUpdateWithoutStudentInput, UserUncheckedUpdateWithoutStudentInput>
+    create: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutStudentInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutStudentInput, UserUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type UserUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tutor?: TutorProfileUpdateOneWithoutUserNestedInput
+    booking?: BookingUpdateManyWithoutUserNestedInput
+    payment?: PaymentUpdateManyWithoutUserNestedInput
+    review?: ReviewUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tutor?: TutorProfileUncheckedUpdateOneWithoutUserNestedInput
+    booking?: BookingUncheckedUpdateManyWithoutUserNestedInput
+    payment?: PaymentUncheckedUpdateManyWithoutUserNestedInput
+    review?: ReviewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CategoryCreateWithoutTutorInput = {
@@ -12516,6 +14214,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    student?: StudentProfileCreateNestedOneWithoutUserInput
     booking?: BookingCreateNestedManyWithoutUserInput
     payment?: PaymentCreateNestedManyWithoutUserInput
     review?: ReviewCreateNestedManyWithoutUserInput
@@ -12535,6 +14234,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    student?: StudentProfileUncheckedCreateNestedOneWithoutUserInput
     booking?: BookingUncheckedCreateNestedManyWithoutUserInput
     payment?: PaymentUncheckedCreateNestedManyWithoutUserInput
     review?: ReviewUncheckedCreateNestedManyWithoutUserInput
@@ -12665,6 +14365,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentProfileUpdateOneWithoutUserNestedInput
     booking?: BookingUpdateManyWithoutUserNestedInput
     payment?: PaymentUpdateManyWithoutUserNestedInput
     review?: ReviewUpdateManyWithoutUserNestedInput
@@ -12684,6 +14385,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentProfileUncheckedUpdateOneWithoutUserNestedInput
     booking?: BookingUncheckedUpdateManyWithoutUserNestedInput
     payment?: PaymentUncheckedUpdateManyWithoutUserNestedInput
     review?: ReviewUncheckedUpdateManyWithoutUserNestedInput
@@ -12756,6 +14458,7 @@ export namespace Prisma {
   export type TutorProfileCreateWithoutUserInput = {
     id?: string
     bio?: string | null
+    gender?: string | null
     hourlyRate: Decimal | DecimalJsLike | number | string
     experience: number
     averageRating?: number
@@ -12773,6 +14476,7 @@ export namespace Prisma {
   export type TutorProfileUncheckedCreateWithoutUserInput = {
     id?: string
     bio?: string | null
+    gender?: string | null
     hourlyRate: Decimal | DecimalJsLike | number | string
     experience: number
     averageRating?: number
@@ -12790,6 +14494,37 @@ export namespace Prisma {
   export type TutorProfileCreateOrConnectWithoutUserInput = {
     where: TutorProfileWhereUniqueInput
     create: XOR<TutorProfileCreateWithoutUserInput, TutorProfileUncheckedCreateWithoutUserInput>
+  }
+
+  export type StudentProfileCreateWithoutUserInput = {
+    id?: string
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    address?: string | null
+    class?: string | null
+    group?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentProfileUncheckedCreateWithoutUserInput = {
+    id?: string
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    address?: string | null
+    class?: string | null
+    group?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentProfileCreateOrConnectWithoutUserInput = {
+    where: StudentProfileWhereUniqueInput
+    create: XOR<StudentProfileCreateWithoutUserInput, StudentProfileUncheckedCreateWithoutUserInput>
   }
 
   export type BookingCreateWithoutUserInput = {
@@ -12918,6 +14653,7 @@ export namespace Prisma {
   export type TutorProfileUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     hourlyRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
@@ -12935,6 +14671,7 @@ export namespace Prisma {
   export type TutorProfileUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     hourlyRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
@@ -12947,6 +14684,43 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     booking?: BookingUncheckedUpdateManyWithoutTutorNestedInput
     review?: ReviewUncheckedUpdateManyWithoutTutorNestedInput
+  }
+
+  export type StudentProfileUpsertWithoutUserInput = {
+    update: XOR<StudentProfileUpdateWithoutUserInput, StudentProfileUncheckedUpdateWithoutUserInput>
+    create: XOR<StudentProfileCreateWithoutUserInput, StudentProfileUncheckedCreateWithoutUserInput>
+    where?: StudentProfileWhereInput
+  }
+
+  export type StudentProfileUpdateToOneWithWhereWithoutUserInput = {
+    where?: StudentProfileWhereInput
+    data: XOR<StudentProfileUpdateWithoutUserInput, StudentProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type StudentProfileUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    class?: NullableStringFieldUpdateOperationsInput | string | null
+    group?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentProfileUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    class?: NullableStringFieldUpdateOperationsInput | string | null
+    group?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BookingUpsertWithWhereUniqueWithoutUserInput = {
@@ -13019,6 +14793,7 @@ export namespace Prisma {
   export type TutorProfileCreateManyCategoryInput = {
     id?: string
     bio?: string | null
+    gender?: string | null
     hourlyRate: Decimal | DecimalJsLike | number | string
     experience: number
     averageRating?: number
@@ -13034,6 +14809,7 @@ export namespace Prisma {
   export type TutorProfileUpdateWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     hourlyRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
@@ -13051,6 +14827,7 @@ export namespace Prisma {
   export type TutorProfileUncheckedUpdateWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     hourlyRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
@@ -13068,6 +14845,7 @@ export namespace Prisma {
   export type TutorProfileUncheckedUpdateManyWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     bio?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     hourlyRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number

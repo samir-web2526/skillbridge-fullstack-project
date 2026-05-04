@@ -5,16 +5,6 @@ import status from "http-status";
 import { tutorService } from "./tutor.service";
 import { paginationHelper } from "../../sharedfile/paginationHelper";
 
-const createTutor = catchAsync(async (req: Request, res: Response) => {
-    const result = await tutorService.createTutor(req.body);
-    sendResponse(res, {
-        statusCode: Number(status.CREATED),
-        success: true,
-        message: "Tutor Created Successfully",
-        data: result,
-    });
-});
-
 const getTutors = catchAsync(async (req: Request, res: Response) => {
     const paginationOptions = paginationHelper.calculatePagination(req.query);
     const filters = req.query; 
@@ -81,12 +71,23 @@ const deleteTutor = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const updateTutorStatus = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await tutorService.updateTutorStatus(id as string, req.body);
+    sendResponse(res, {
+        statusCode: Number(status.OK),
+        success: true,
+        message: "Tutor status updated successfully",
+        data: result,
+    });
+});
+
 export const tutorController = {
-    createTutor,
     getTutors,
     getTutorById,
     getMyProfile,
     getStats,
     updateTutor,
+    updateTutorStatus,
     deleteTutor,
 };

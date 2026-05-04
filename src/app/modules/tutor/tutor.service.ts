@@ -1,19 +1,15 @@
 import { prisma } from "../../../lib/prisma";
 import AppError from "../../errorHelpers/AppError";
 import status from "http-status";
-
-const createTutor = async (payload: any) => {
-    const result = await prisma.tutorProfile.create({
-        data: payload,
-    });
-    return result;
-};
+import { UserStatus } from "../../../generated";
 
 const getTutors = async (paginationOptions: any, filters: any) => {
     const { page, limit, skip, sortBy, sortOrder } = paginationOptions;
     const { searchTerm, categoryId, minPrice, maxPrice } = filters;
 
-    const andConditions: any[] = [{ isDeleted: false }];
+    const andConditions: any[] = [
+        { isDeleted: false },
+    ];
 
     if (searchTerm) {
         andConditions.push({
@@ -129,12 +125,30 @@ const deleteTutor = async (id: string) => {
     return result;
 };
 
+const updateTutorStatus = async (id: string, payload: { status: UserStatus }) => {
+    const tutor = await prisma.tutorProfile.findUnique({
+        where: { id },
+        select: { userId: true }
+    });
+
+    if (!tutor) {
+        throw new AppError(status.NOT_FOUND, "Tutor not found");
+    }
+
+    const result = await prisma.user.update({
+        where: { id: tutor.userId },
+        data: { status: payload.status },
+    });
+
+    return result;
+};
+
 export const tutorService = {
-    createTutor,
     getTutors,
     getTutorById,
     getMyProfile,
     getStats,
     updateTutor,
+    updateTutorStatus,
     deleteTutor,
 };

@@ -27,7 +27,14 @@ const updateTutor = z.object({
     }),
 });
 
+const updateTutorStatus = z.object({
+    body: z.object({
+        status: z.enum(['ACTIVE', 'BANNED', 'PENDING']),
+    }),
+});
+
 export const TutorValidation = {
     createTutor,
     updateTutor,
+    updateTutorStatus,
 };

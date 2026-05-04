@@ -1,16 +1,19 @@
 import { Response } from "express";
-import { JwtPayload, SignOptions, Secret } from "jsonwebtoken";
+import { JwtPayload, SignOptions } from "jsonwebtoken";
 import { CookieUtils } from "./cookie";
 import { jwtUtils } from "./jwt";
 import { envVars } from "../../config/env";
 
+
+
+//Creating access token
 const getAccessToken = (payload: JwtPayload) => {
     const options: SignOptions = {
         expiresIn: envVars.ACCESS_TOKEN_EXPIRES_IN as any
     };
     const accessToken = jwtUtils.createToken(
         payload,
-        envVars.ACCESS_TOKEN_SECRET as Secret,
+        envVars.ACCESS_TOKEN_SECRET as string,
         options
     );
 
@@ -23,18 +26,22 @@ const getRefreshToken = (payload: JwtPayload) => {
     };
     const refreshToken = jwtUtils.createToken(
         payload,
-        envVars.REFRESH_TOKEN_SECRET as Secret,
+        envVars.REFRESH_TOKEN_SECRET as string,
         options
     );
     return refreshToken;
 }
 
+
 const setAccessTokenCookie = (res: Response, token: string) => {
     CookieUtils.setCookie(res, 'accessToken', token, {
         httpOnly: true,
-        secure: envVars.NODE_ENV === 'production',
+        secure: false,
         sameSite: "lax",
+        // secure: true,
+        // sameSite: "none",
         path: '/',
+        //1 day
         maxAge: 60 * 60 * 24 * 1000,
     });
 }
@@ -42,16 +49,35 @@ const setAccessTokenCookie = (res: Response, token: string) => {
 const setRefreshTokenCookie = (res: Response, token: string) => {
     CookieUtils.setCookie(res, 'refreshToken', token, {
         httpOnly: true,
-        secure: envVars.NODE_ENV === 'production',
+        secure: false,
         sameSite: "lax",
+        // secure: true,
+        // sameSite: "none",
         path: '/',
+        //7d
         maxAge: 60 * 60 * 24 * 1000 * 7,
     });
 }
+
+const setBetterAuthSessionCookie = (res: Response, token: string) => {
+    CookieUtils.setCookie(res, "better-auth.session_token", token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        // secure: true,
+        // sameSite: "none",
+        path: '/',
+        //1 day
+        maxAge: 60 * 60 * 24 * 1000,
+    });
+}
+
+
 
 export const tokenUtils = {
     getAccessToken,
     getRefreshToken,
     setAccessTokenCookie,
     setRefreshTokenCookie,
+    setBetterAuthSessionCookie,
 }

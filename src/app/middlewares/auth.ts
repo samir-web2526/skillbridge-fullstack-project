@@ -1,43 +1,58 @@
 import { NextFunction, Request, Response } from "express";
 import { Secret } from "jsonwebtoken";
-import { envVars } from "../../config/env";
 import { jwtUtils } from "../utils/jwt";
+import { envVars } from "../../config/env";
+import { prisma } from "../../lib/prisma";
+import AppError from "../errorHelpers/AppError";
+import status from "http-status";
+import { UserStatus } from "../../generated";
 
-export enum userRole {
-    STUDENT = "STUDENT",
-    TUTOR = "TUTOR",
-    ADMIN = "ADMIN"
-}
+export const checkAuth =
+  (...authRoles: string[]) =>
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        // ======================= VERIFY TOKEN =======================
+        const token = req.headers.authorization?.split(" ")[1];
 
+        if (!token) {
+          throw new AppError(status.UNAUTHORIZED, "Unauthorized! No token provided.");
+        }
 
-const auth = (...roles: userRole[]) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      // get authorization token
-      const token = req.headers.authorization;
-      if (!token) {
-        throw new Error('You are not authorized');
-      }
+        // ======================= VERIFY TOKEN DATA =======================
+        const verifyResponse = jwtUtils.verifyToken(
+          token,
+          envVars.ACCESS_TOKEN_SECRET as Secret
+        );
 
-      // verify token
-      let verifiedUser = null;
+        if (!verifyResponse.success) {
+          throw new AppError(status.UNAUTHORIZED, "Invalid or expired token.");
+        }
 
-      verifiedUser = jwtUtils.verifyToken(token, envVars.ACCESS_TOKEN_SECRET as Secret);
+        const { id, name, email, role } = verifyResponse.data!;
 
-      req.user = verifiedUser as any; // Attach user to request
-
-      // role based access control
-      if (roles.length && !roles.includes(verifiedUser.role as userRole)) {
-        throw new Error("You don't have permission to access this part");
-      }
-      next();
-    } catch (error: any) {
-        res.status(401).json({
-            success: false,
-            message: error.message || "Unauthorized",
+        // ======================= VERIFY USER ACCESS AND OTHERS =======================
+        const user = await prisma.user.findUnique({
+          where: { id, isDeleted: false },
         });
-    }
-  };
-};
 
-export default auth;
+        if (!user) {
+          throw new AppError(status.NOT_FOUND, "User not found.");
+        }
+
+        if (user.status === UserStatus.BANNED) {
+          throw new AppError(status.FORBIDDEN, "User is blocked/banned.");
+        }
+
+        // ======================= VERIFY USER ROLE =======================
+        if (authRoles.length && !authRoles.includes(role)) {
+          throw new AppError(status.FORBIDDEN, "Forbidden! You don't have permission.");
+        }
+
+        // ======================= SET USER IN REQUEST =======================
+        req.user = { id, name, email, role };
+
+        next();
+      } catch (error: any) {
+        next(error);
+      }
+    };

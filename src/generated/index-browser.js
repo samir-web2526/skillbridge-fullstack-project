@@ -168,9 +168,24 @@ exports.Prisma.ReviewScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.StudentProfileScalarFieldEnum = {
+  id: 'id',
+  gender: 'gender',
+  dateOfBirth: 'dateOfBirth',
+  address: 'address',
+  class: 'class',
+  group: 'group',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.TutorProfileScalarFieldEnum = {
   id: 'id',
   bio: 'bio',
+  gender: 'gender',
   hourlyRate: 'hourlyRate',
   experience: 'experience',
   averageRating: 'averageRating',
@@ -255,7 +270,8 @@ exports.Role = exports.$Enums.Role = {
 
 exports.UserStatus = exports.$Enums.UserStatus = {
   ACTIVE: 'ACTIVE',
-  BANNED: 'BANNED'
+  BANNED: 'BANNED',
+  PENDING: 'PENDING'
 };
 
 exports.Prisma.ModelName = {
@@ -263,6 +279,7 @@ exports.Prisma.ModelName = {
   Category: 'Category',
   Payment: 'Payment',
   Review: 'Review',
+  StudentProfile: 'StudentProfile',
   TutorProfile: 'TutorProfile',
   User: 'User'
 };

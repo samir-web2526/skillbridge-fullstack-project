@@ -15,6 +15,7 @@ enum Role {
 enum UserStatus {
   ACTIVE
   BANNED
+  PENDING
 }
 
 enum PaymentStatus {
