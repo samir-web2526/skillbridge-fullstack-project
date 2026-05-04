@@ -3,13 +3,83 @@ import AppError from "../../errorHelpers/AppError";
 import status from "http-status";
 import { UserStatus } from "../../../generated";
 
+// const getTutors = async (paginationOptions: any, filters: any) => {
+//     const { page, limit, skip, sortBy, sortOrder } = paginationOptions;
+//     const { searchTerm, categoryId, minPrice, maxPrice, category } = filters;
+
+//     const andConditions: any[] = [
+//         { isDeleted: false },
+//     ];
+
+//     if (searchTerm) {
+//         andConditions.push({
+//             OR: [
+//                 { user: { name: { contains: searchTerm, mode: "insensitive" } } },
+//                 { bio: { contains: searchTerm, mode: "insensitive" } },
+//             ],
+//         });
+//     }
+
+//     if (categoryId || category) {
+//         andConditions.push({
+//             OR: [
+//                 categoryId ? { categoryId } : undefined,
+//                 category
+//                     ? {
+//                         category: {
+//                             name: {
+//                                 contains: category,
+//                                 mode: "insensitive",
+//                             },
+//                         },
+//                     }
+//                     : undefined,
+//             ].filter(Boolean),
+//         });
+//     }
+//     if (minPrice !== undefined || maxPrice !== undefined) {
+//         andConditions.push({
+//             hourlyRate: {
+//                 ...(minPrice !== undefined && { gte: Number(minPrice) }),
+//                 ...(maxPrice !== undefined && { lte: Number(maxPrice) }),
+//             },
+//         });
+//     }
+
+//     const whereConditions = { AND: andConditions };
+
+//     const result = await prisma.tutorProfile.findMany({
+//         where: whereConditions,
+//         skip,
+//         take: limit,
+//         orderBy: sortBy
+//             ? { [sortBy]: sortOrder }
+//             : { createdAt: "desc" },
+//         include: {
+//             user: true,
+//             category: true,
+//         },
+//     });
+
+//     const total = await prisma.tutorProfile.count({
+//         where: whereConditions,
+//     });
+
+//     return {
+//         meta: {
+//             page,
+//             limit,
+//             total,
+//         },
+//         data: result,
+//     };
+// };
+
 const getTutors = async (paginationOptions: any, filters: any) => {
     const { page, limit, skip, sortBy, sortOrder } = paginationOptions;
-    const { searchTerm, categoryId, minPrice, maxPrice } = filters;
+    const { searchTerm, categoryId, minPrice, maxPrice, category } = filters;
 
-    const andConditions: any[] = [
-        { isDeleted: false },
-    ];
+    const andConditions: any[] = [{ isDeleted: false }];
 
     if (searchTerm) {
         andConditions.push({
@@ -24,12 +94,24 @@ const getTutors = async (paginationOptions: any, filters: any) => {
         andConditions.push({ categoryId });
     }
 
-    if (minPrice) {
-        andConditions.push({ hourlyRate: { gte: Number(minPrice) } });
+    if (category && category.trim() !== "") {
+        andConditions.push({
+            category: {
+                name: {
+                    contains: category,
+                    mode: "insensitive",
+                },
+            },
+        });
     }
 
-    if (maxPrice) {
-        andConditions.push({ hourlyRate: { lte: Number(maxPrice) } });
+    if (minPrice !== undefined || maxPrice !== undefined) {
+        andConditions.push({
+            hourlyRate: {
+                ...(minPrice !== undefined && { gte: Number(minPrice) }),
+                ...(maxPrice !== undefined && { lte: Number(maxPrice) }),
+            },
+        });
     }
 
     const whereConditions = { AND: andConditions };
@@ -38,13 +120,8 @@ const getTutors = async (paginationOptions: any, filters: any) => {
         where: whereConditions,
         skip,
         take: limit,
-        orderBy: {
-            [sortBy]: sortOrder,
-        },
-        include: {
-            user: true,
-            category: true,
-        },
+        orderBy: sortBy ? { [sortBy]: sortOrder } : { createdAt: "desc" },
+        include: { user: true, category: true },
     });
 
     const total = await prisma.tutorProfile.count({
@@ -52,11 +129,7 @@ const getTutors = async (paginationOptions: any, filters: any) => {
     });
 
     return {
-        meta: {
-            page,
-            limit,
-            total,
-        },
+        meta: { page, limit, total },
         data: result,
     };
 };

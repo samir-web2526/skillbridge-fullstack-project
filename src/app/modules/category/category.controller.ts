@@ -3,6 +3,7 @@ import catchAsync from "../../sharedfile/catchAsync";
 import sendResponse from "../../sharedfile/sendResponse";
 import status from "http-status";
 import { categoryService } from "./category.service";
+import { paginationHelper } from "../../sharedfile";
 
 const createCategory = catchAsync(async (req: Request, res: Response) => {
     const result = await categoryService.createCategory(req.body);
@@ -15,7 +16,8 @@ const createCategory = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getCategory = catchAsync(async (req: Request, res: Response) => {
-    const result = await categoryService.getCategory();
+    const paginationOptions = paginationHelper.calculatePagination(req.query);
+    const result = await categoryService.getCategory(paginationOptions);
     sendResponse(res, {
         statusCode: Number(status.OK),
         success: true,
@@ -25,8 +27,8 @@ const getCategory = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getCategoryById = catchAsync(async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const result = await categoryService.getCategoryById(id as string);
+    const { categoryId } = req.params;
+    const result = await categoryService.getCategoryById(categoryId as string);
     sendResponse(res, {
         statusCode: Number(status.OK),
         success: true,
@@ -36,8 +38,8 @@ const getCategoryById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateCategory = catchAsync(async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const result = await categoryService.updateCategory(id as string, req.body);
+    const { categoryId } = req.params;
+    const result = await categoryService.updateCategory(categoryId as string, req.body);
     sendResponse(res, {
         statusCode: Number(status.OK),
         success: true,
@@ -47,8 +49,8 @@ const updateCategory = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteCategory = catchAsync(async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const result = await categoryService.deleteCategory(id as string);
+    const { categoryId } = req.params;
+    const result = await categoryService.deleteCategory(categoryId as string);
     sendResponse(res, {
         statusCode: Number(status.OK),
         success: true,

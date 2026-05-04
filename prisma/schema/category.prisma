@@ -4,5 +4,9 @@ model Category {
   description String?
   tutor       TutorProfile[]
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
   @@map("category")
 }

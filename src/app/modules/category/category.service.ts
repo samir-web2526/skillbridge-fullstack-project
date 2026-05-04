@@ -9,18 +9,35 @@ const createCategory = async (payload: any) => {
     return result;
 };
 
-const getCategory = async () => {
+const getCategory = async (paginationOptions: any) => {
+    const { page, limit, skip, sortBy, sortOrder } = paginationOptions;
+
     const result = await prisma.category.findMany({
+        skip,
+        take: limit,
+        orderBy: sortBy
+            ? { [sortBy]: sortOrder }
+            : { createdAt: "desc" },
         include: {
             tutor: true,
         },
     });
-    return result;
+
+    const total = await prisma.category.count();
+
+    return {
+        meta: {
+            page,
+            limit,
+            total,
+        },
+        data: result,
+    };
 };
 
-const getCategoryById = async (id: string) => {
+const getCategoryById = async (categoryId: string) => {
     const result = await prisma.category.findUnique({
-        where: { id },
+        where: { id: categoryId },
         include: {
             tutor: true,
         },
@@ -31,17 +48,17 @@ const getCategoryById = async (id: string) => {
     return result;
 };
 
-const updateCategory = async (id: string, payload: any) => {
+const updateCategory = async (categoryId: string, payload: any) => {
     const result = await prisma.category.update({
-        where: { id },
+        where: { id: categoryId },
         data: payload,
     });
     return result;
 };
 
-const deleteCategory = async (id: string) => {
+const deleteCategory = async (categoryId: string) => {
     const result = await prisma.category.delete({
-        where: { id },
+        where: { id: categoryId },
     });
     return result;
 };
