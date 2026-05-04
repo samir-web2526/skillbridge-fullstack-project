@@ -1,5 +1,4 @@
 import { prisma } from "../lib/prisma";
-import { userRole } from "../app/middlewares/auth";
 import bcrypt from "bcrypt";
 import { envVars } from "../config/env";
 
@@ -27,12 +26,12 @@ async function seedAdmin() {
     const hashedPassword = await bcrypt.hash(adminPass, Number(envVars.BCRYPT_SALT_ROUNDS || 12));
 
     await prisma.user.create({
-        data: {
-            name: adminName,
-            email: adminEmail,
-            password: hashedPassword,
-            role: userRole.ADMIN,
-        }
+      data: {
+        name: adminName,
+        email: adminEmail,
+        password: hashedPassword,
+        role: 'ADMIN',
+      },
     });
 
     console.log("Admin created successfully");

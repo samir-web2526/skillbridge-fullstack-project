@@ -7,7 +7,7 @@ import { paginationHelper } from "../../sharedfile/paginationHelper";
 
 const getTutors = catchAsync(async (req: Request, res: Response) => {
     const paginationOptions = paginationHelper.calculatePagination(req.query);
-    const filters = req.query; 
+    const filters = req.query;
     const result = await tutorService.getTutors(paginationOptions, filters);
     sendResponse(res, {
         statusCode: Number(status.OK),
@@ -71,6 +71,27 @@ const deleteTutor = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const restoreTutor = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await tutorService.restoreTutor(id as string);
+    sendResponse(res, {
+        statusCode: Number(status.OK),
+        success: true,
+        message: "Tutor restored successfully",
+        data: result,
+    });
+});
+
+const getDeletedTutors = catchAsync(async (req: Request, res: Response) => {
+    const result = await tutorService.getDeletedTutors();
+    sendResponse(res, {
+        statusCode: Number(status.OK),
+        success: true,
+        message: "Deleted tutors fetched successfully",
+        data: result,
+    });
+});
+
 const updateTutorStatus = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     const result = await tutorService.updateTutorStatus(id as string, req.body);
@@ -90,4 +111,6 @@ export const tutorController = {
     updateTutor,
     updateTutorStatus,
     deleteTutor,
+    restoreTutor,
+    getDeletedTutors,
 };

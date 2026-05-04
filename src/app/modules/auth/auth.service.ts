@@ -83,8 +83,16 @@ const login = async (payload: ILoginPayload) => {
         throw new AppError(status.NOT_FOUND, 'User not found');
     }
 
+    if (user.isDeleted) {
+        throw new AppError(status.FORBIDDEN, 'This account has been deleted');
+    }
+
     if (user.status === UserStatus.BANNED) {
         throw new AppError(status.FORBIDDEN, 'Your account has been banned');
+    }
+
+    if (user.status === UserStatus.PENDING) {
+        throw new AppError(status.FORBIDDEN, 'Your account is pending admin approval');
     }
 
     const isPasswordMatched = await bcrypt.compare(password, user.password);
@@ -101,13 +109,13 @@ const login = async (payload: ILoginPayload) => {
 
     const accessToken = jwtUtils.createToken(
         jwtPayload,
-        envVars.ACCESS_TOKEN_SECRET as Secret,
+        envVars.ACCESS_TOKEN_SECRET as string,
         { expiresIn: envVars.ACCESS_TOKEN_EXPIRES_IN as any }
     );
 
     const refreshToken = jwtUtils.createToken(
         jwtPayload,
-        envVars.REFRESH_TOKEN_SECRET as Secret,
+        envVars.REFRESH_TOKEN_SECRET as string,
         { expiresIn: envVars.REFRESH_TOKEN_EXPIRES_IN as any }
     );
 
@@ -118,7 +126,7 @@ const login = async (payload: ILoginPayload) => {
 };
 
 const refreshToken = async (token: string) => {
-    const verifyResponse = jwtUtils.verifyToken(token, envVars.REFRESH_TOKEN_SECRET as Secret);
+    const verifyResponse = jwtUtils.verifyToken(token, envVars.REFRESH_TOKEN_SECRET as string);
 
     if (!verifyResponse.success) {
         throw new AppError(status.FORBIDDEN, 'Invalid Refresh Token');
@@ -134,6 +142,14 @@ const refreshToken = async (token: string) => {
         throw new AppError(status.NOT_FOUND, 'User not found');
     }
 
+    if (user.isDeleted) {
+        throw new AppError(status.FORBIDDEN, 'This account has been deleted');
+    }
+
+    if (user.status === UserStatus.BANNED) {
+        throw new AppError(status.FORBIDDEN, 'Your account has been banned');
+    }
+
     const jwtPayload = {
         id: user.id,
         email: user.email,
@@ -142,7 +158,7 @@ const refreshToken = async (token: string) => {
 
     const accessToken = jwtUtils.createToken(
         jwtPayload,
-        envVars.ACCESS_TOKEN_SECRET as Secret,
+        envVars.ACCESS_TOKEN_SECRET as string,
         { expiresIn: envVars.ACCESS_TOKEN_EXPIRES_IN as any }
     );
 

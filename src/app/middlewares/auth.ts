@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { Secret } from "jsonwebtoken";
 import { jwtUtils } from "../utils/jwt";
 import { envVars } from "../../config/env";
 import { prisma } from "../../lib/prisma";
@@ -21,7 +20,7 @@ export const checkAuth =
         // ======================= VERIFY TOKEN DATA =======================
         const verifyResponse = jwtUtils.verifyToken(
           token,
-          envVars.ACCESS_TOKEN_SECRET as Secret
+          envVars.ACCESS_TOKEN_SECRET as string
         );
 
         if (!verifyResponse.success) {
@@ -44,7 +43,7 @@ export const checkAuth =
         }
 
         // ======================= VERIFY USER ROLE =======================
-        if (authRoles.length && !authRoles.includes(role)) {
+        if (authRoles.length && !authRoles.includes(user.role)) {
           throw new AppError(status.FORBIDDEN, "Forbidden! You don't have permission.");
         }
 

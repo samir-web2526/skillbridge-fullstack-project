@@ -115,11 +115,56 @@ const updateTutor = async (id: string, payload: any) => {
 };
 
 const deleteTutor = async (id: string) => {
+    const tutor = await prisma.tutorProfile.findUnique({
+        where: { id },
+    });
+
+    if (!tutor) {
+        throw new AppError(status.NOT_FOUND, "Tutor not found");
+    }
+
+    if (tutor.isDeleted) {
+        throw new AppError(status.BAD_REQUEST, "Tutor is already deleted");
+    }
+
     const result = await prisma.tutorProfile.update({
         where: { id },
         data: {
             isDeleted: true,
             deletedAt: new Date(),
+        },
+    });
+    return result;
+};
+const restoreTutor = async (id: string) => {
+    const tutor = await prisma.tutorProfile.findUnique({
+        where: { id },
+    });
+
+    if (!tutor) {
+        throw new AppError(status.NOT_FOUND, "Tutor not found");
+    }
+
+    if (!tutor.isDeleted) {
+        throw new AppError(status.BAD_REQUEST, "Tutor is not deleted");
+    }
+
+    const result = await prisma.tutorProfile.update({
+        where: { id },
+        data: {
+            isDeleted: false,
+            deletedAt: null,
+        },
+    });
+    return result;
+};
+
+const getDeletedTutors = async () => {
+    const result = await prisma.tutorProfile.findMany({
+        where: { isDeleted: true },
+        include: {
+            user: true,
+            category: true,
         },
     });
     return result;
@@ -151,4 +196,6 @@ export const tutorService = {
     updateTutor,
     updateTutorStatus,
     deleteTutor,
+    restoreTutor,
+    getDeletedTutors,
 };
