@@ -1,21 +1,26 @@
 model Booking {
-  id        String        @id @default(uuid())
+  id        String   @id @default(uuid())
   date      DateTime
-  startTime DateTime?
-  endTime   DateTime?
+  startTime DateTime
+  endTime   DateTime
+
   status    BookingStatus @default(PENDING)
   isDeleted Boolean       @default(false)
   deletedAt DateTime?
-  version   Int           @default(0)
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  tutorId   String
-  userId    String
-  tutor     TutorProfile  @relation("TutorBookings", fields: [tutorId], references: [id], onDelete: Restrict)
-  user      User          @relation("StudentBookings", fields: [userId], references: [id], onDelete: Restrict)
-  payment   Payment?
-  review    Review?
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tutorId String
+  userId  String
+
+  tutor TutorProfile @relation("TutorBookings", fields: [tutorId], references: [id], onDelete: Restrict)
+  user  User         @relation("StudentBookings", fields: [userId], references: [id], onDelete: Restrict)
+
+  payment Payment?
+  review  Review?
+
+  @@index([tutorId, date])
   @@index([userId, tutorId, status])
   @@map("booking")
 }
@@ -134,26 +139,34 @@ model StudentProfile {
 }
 
 model TutorProfile {
-  id            String    @id @default(uuid())
+  id            String  @id @default(uuid())
   bio           String?
   gender        String?
-  hourlyRate    Decimal   @db.Decimal(10, 2)
+  hourlyRate    Decimal @db.Decimal(10, 2)
   experience    Int
-  averageRating Float     @default(0)
-  isAvailable   Boolean   @default(true)
-  isDeleted     Boolean   @default(false)
-  deletedAt     DateTime?
-  version       Int       @default(0)
-  categoryId    String
-  userId        String    @unique
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  category      Category  @relation(fields: [categoryId], references: [id])
-  user          User      @relation(fields: [userId], references: [id])
-  booking       Booking[] @relation("TutorBookings")
-  review        Review[]
+  averageRating Float   @default(0)
 
-  @@index([categoryId, userId])
+  isAvailable Boolean @default(true)
+
+  availableFrom String?
+  availableTo   String?
+
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+
+  categoryId String
+  userId     String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category Category @relation(fields: [categoryId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
+  booking Booking[] @relation("TutorBookings")
+  review  Review[]
+
+  @@index([categoryId, isDeleted])
   @@map("tutor_profile")
 }
 

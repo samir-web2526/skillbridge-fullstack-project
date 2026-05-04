@@ -1607,18 +1607,8 @@ export namespace Prisma {
 
   export type AggregateBooking = {
     _count: BookingCountAggregateOutputType | null
-    _avg: BookingAvgAggregateOutputType | null
-    _sum: BookingSumAggregateOutputType | null
     _min: BookingMinAggregateOutputType | null
     _max: BookingMaxAggregateOutputType | null
-  }
-
-  export type BookingAvgAggregateOutputType = {
-    version: number | null
-  }
-
-  export type BookingSumAggregateOutputType = {
-    version: number | null
   }
 
   export type BookingMinAggregateOutputType = {
@@ -1629,7 +1619,6 @@ export namespace Prisma {
     status: $Enums.BookingStatus | null
     isDeleted: boolean | null
     deletedAt: Date | null
-    version: number | null
     createdAt: Date | null
     updatedAt: Date | null
     tutorId: string | null
@@ -1644,7 +1633,6 @@ export namespace Prisma {
     status: $Enums.BookingStatus | null
     isDeleted: boolean | null
     deletedAt: Date | null
-    version: number | null
     createdAt: Date | null
     updatedAt: Date | null
     tutorId: string | null
@@ -1659,7 +1647,6 @@ export namespace Prisma {
     status: number
     isDeleted: number
     deletedAt: number
-    version: number
     createdAt: number
     updatedAt: number
     tutorId: number
@@ -1667,14 +1654,6 @@ export namespace Prisma {
     _all: number
   }
 
-
-  export type BookingAvgAggregateInputType = {
-    version?: true
-  }
-
-  export type BookingSumAggregateInputType = {
-    version?: true
-  }
 
   export type BookingMinAggregateInputType = {
     id?: true
@@ -1684,7 +1663,6 @@ export namespace Prisma {
     status?: true
     isDeleted?: true
     deletedAt?: true
-    version?: true
     createdAt?: true
     updatedAt?: true
     tutorId?: true
@@ -1699,7 +1677,6 @@ export namespace Prisma {
     status?: true
     isDeleted?: true
     deletedAt?: true
-    version?: true
     createdAt?: true
     updatedAt?: true
     tutorId?: true
@@ -1714,7 +1691,6 @@ export namespace Prisma {
     status?: true
     isDeleted?: true
     deletedAt?: true
-    version?: true
     createdAt?: true
     updatedAt?: true
     tutorId?: true
@@ -1760,18 +1736,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: BookingAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: BookingSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: BookingMinAggregateInputType
@@ -1802,8 +1766,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: BookingCountAggregateInputType | true
-    _avg?: BookingAvgAggregateInputType
-    _sum?: BookingSumAggregateInputType
     _min?: BookingMinAggregateInputType
     _max?: BookingMaxAggregateInputType
   }
@@ -1811,19 +1773,16 @@ export namespace Prisma {
   export type BookingGroupByOutputType = {
     id: string
     date: Date
-    startTime: Date | null
-    endTime: Date | null
+    startTime: Date
+    endTime: Date
     status: $Enums.BookingStatus
     isDeleted: boolean
     deletedAt: Date | null
-    version: number
     createdAt: Date
     updatedAt: Date
     tutorId: string
     userId: string
     _count: BookingCountAggregateOutputType | null
-    _avg: BookingAvgAggregateOutputType | null
-    _sum: BookingSumAggregateOutputType | null
     _min: BookingMinAggregateOutputType | null
     _max: BookingMaxAggregateOutputType | null
   }
@@ -1850,7 +1809,6 @@ export namespace Prisma {
     status?: boolean
     isDeleted?: boolean
     deletedAt?: boolean
-    version?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tutorId?: boolean
@@ -1869,7 +1827,6 @@ export namespace Prisma {
     status?: boolean
     isDeleted?: boolean
     deletedAt?: boolean
-    version?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tutorId?: boolean
@@ -1886,7 +1843,6 @@ export namespace Prisma {
     status?: boolean
     isDeleted?: boolean
     deletedAt?: boolean
-    version?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tutorId?: boolean
@@ -1903,14 +1859,13 @@ export namespace Prisma {
     status?: boolean
     isDeleted?: boolean
     deletedAt?: boolean
-    version?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tutorId?: boolean
     userId?: boolean
   }
 
-  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "date" | "startTime" | "endTime" | "status" | "isDeleted" | "deletedAt" | "version" | "createdAt" | "updatedAt" | "tutorId" | "userId", ExtArgs["result"]["booking"]>
+  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "date" | "startTime" | "endTime" | "status" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt" | "tutorId" | "userId", ExtArgs["result"]["booking"]>
   export type BookingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tutor?: boolean | TutorProfileDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -1937,12 +1892,11 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       date: Date
-      startTime: Date | null
-      endTime: Date | null
+      startTime: Date
+      endTime: Date
       status: $Enums.BookingStatus
       isDeleted: boolean
       deletedAt: Date | null
-      version: number
       createdAt: Date
       updatedAt: Date
       tutorId: string
@@ -2381,7 +2335,6 @@ export namespace Prisma {
     readonly status: FieldRef<"Booking", 'BookingStatus'>
     readonly isDeleted: FieldRef<"Booking", 'Boolean'>
     readonly deletedAt: FieldRef<"Booking", 'DateTime'>
-    readonly version: FieldRef<"Booking", 'Int'>
     readonly createdAt: FieldRef<"Booking", 'DateTime'>
     readonly updatedAt: FieldRef<"Booking", 'DateTime'>
     readonly tutorId: FieldRef<"Booking", 'String'>
@@ -7407,14 +7360,12 @@ export namespace Prisma {
     hourlyRate: Decimal | null
     experience: number | null
     averageRating: number | null
-    version: number | null
   }
 
   export type TutorProfileSumAggregateOutputType = {
     hourlyRate: Decimal | null
     experience: number | null
     averageRating: number | null
-    version: number | null
   }
 
   export type TutorProfileMinAggregateOutputType = {
@@ -7425,9 +7376,10 @@ export namespace Prisma {
     experience: number | null
     averageRating: number | null
     isAvailable: boolean | null
+    availableFrom: string | null
+    availableTo: string | null
     isDeleted: boolean | null
     deletedAt: Date | null
-    version: number | null
     categoryId: string | null
     userId: string | null
     createdAt: Date | null
@@ -7442,9 +7394,10 @@ export namespace Prisma {
     experience: number | null
     averageRating: number | null
     isAvailable: boolean | null
+    availableFrom: string | null
+    availableTo: string | null
     isDeleted: boolean | null
     deletedAt: Date | null
-    version: number | null
     categoryId: string | null
     userId: string | null
     createdAt: Date | null
@@ -7459,9 +7412,10 @@ export namespace Prisma {
     experience: number
     averageRating: number
     isAvailable: number
+    availableFrom: number
+    availableTo: number
     isDeleted: number
     deletedAt: number
-    version: number
     categoryId: number
     userId: number
     createdAt: number
@@ -7474,14 +7428,12 @@ export namespace Prisma {
     hourlyRate?: true
     experience?: true
     averageRating?: true
-    version?: true
   }
 
   export type TutorProfileSumAggregateInputType = {
     hourlyRate?: true
     experience?: true
     averageRating?: true
-    version?: true
   }
 
   export type TutorProfileMinAggregateInputType = {
@@ -7492,9 +7444,10 @@ export namespace Prisma {
     experience?: true
     averageRating?: true
     isAvailable?: true
+    availableFrom?: true
+    availableTo?: true
     isDeleted?: true
     deletedAt?: true
-    version?: true
     categoryId?: true
     userId?: true
     createdAt?: true
@@ -7509,9 +7462,10 @@ export namespace Prisma {
     experience?: true
     averageRating?: true
     isAvailable?: true
+    availableFrom?: true
+    availableTo?: true
     isDeleted?: true
     deletedAt?: true
-    version?: true
     categoryId?: true
     userId?: true
     createdAt?: true
@@ -7526,9 +7480,10 @@ export namespace Prisma {
     experience?: true
     averageRating?: true
     isAvailable?: true
+    availableFrom?: true
+    availableTo?: true
     isDeleted?: true
     deletedAt?: true
-    version?: true
     categoryId?: true
     userId?: true
     createdAt?: true
@@ -7630,9 +7585,10 @@ export namespace Prisma {
     experience: number
     averageRating: number
     isAvailable: boolean
+    availableFrom: string | null
+    availableTo: string | null
     isDeleted: boolean
     deletedAt: Date | null
-    version: number
     categoryId: string
     userId: string
     createdAt: Date
@@ -7666,9 +7622,10 @@ export namespace Prisma {
     experience?: boolean
     averageRating?: boolean
     isAvailable?: boolean
+    availableFrom?: boolean
+    availableTo?: boolean
     isDeleted?: boolean
     deletedAt?: boolean
-    version?: boolean
     categoryId?: boolean
     userId?: boolean
     createdAt?: boolean
@@ -7688,9 +7645,10 @@ export namespace Prisma {
     experience?: boolean
     averageRating?: boolean
     isAvailable?: boolean
+    availableFrom?: boolean
+    availableTo?: boolean
     isDeleted?: boolean
     deletedAt?: boolean
-    version?: boolean
     categoryId?: boolean
     userId?: boolean
     createdAt?: boolean
@@ -7707,9 +7665,10 @@ export namespace Prisma {
     experience?: boolean
     averageRating?: boolean
     isAvailable?: boolean
+    availableFrom?: boolean
+    availableTo?: boolean
     isDeleted?: boolean
     deletedAt?: boolean
-    version?: boolean
     categoryId?: boolean
     userId?: boolean
     createdAt?: boolean
@@ -7726,16 +7685,17 @@ export namespace Prisma {
     experience?: boolean
     averageRating?: boolean
     isAvailable?: boolean
+    availableFrom?: boolean
+    availableTo?: boolean
     isDeleted?: boolean
     deletedAt?: boolean
-    version?: boolean
     categoryId?: boolean
     userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type TutorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bio" | "gender" | "hourlyRate" | "experience" | "averageRating" | "isAvailable" | "isDeleted" | "deletedAt" | "version" | "categoryId" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["tutorProfile"]>
+  export type TutorProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bio" | "gender" | "hourlyRate" | "experience" | "averageRating" | "isAvailable" | "availableFrom" | "availableTo" | "isDeleted" | "deletedAt" | "categoryId" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["tutorProfile"]>
   export type TutorProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -7768,9 +7728,10 @@ export namespace Prisma {
       experience: number
       averageRating: number
       isAvailable: boolean
+      availableFrom: string | null
+      availableTo: string | null
       isDeleted: boolean
       deletedAt: Date | null
-      version: number
       categoryId: string
       userId: string
       createdAt: Date
@@ -8209,9 +8170,10 @@ export namespace Prisma {
     readonly experience: FieldRef<"TutorProfile", 'Int'>
     readonly averageRating: FieldRef<"TutorProfile", 'Float'>
     readonly isAvailable: FieldRef<"TutorProfile", 'Boolean'>
+    readonly availableFrom: FieldRef<"TutorProfile", 'String'>
+    readonly availableTo: FieldRef<"TutorProfile", 'String'>
     readonly isDeleted: FieldRef<"TutorProfile", 'Boolean'>
     readonly deletedAt: FieldRef<"TutorProfile", 'DateTime'>
-    readonly version: FieldRef<"TutorProfile", 'Int'>
     readonly categoryId: FieldRef<"TutorProfile", 'String'>
     readonly userId: FieldRef<"TutorProfile", 'String'>
     readonly createdAt: FieldRef<"TutorProfile", 'DateTime'>
@@ -9976,7 +9938,6 @@ export namespace Prisma {
     status: 'status',
     isDeleted: 'isDeleted',
     deletedAt: 'deletedAt',
-    version: 'version',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     tutorId: 'tutorId',
@@ -10055,9 +10016,10 @@ export namespace Prisma {
     experience: 'experience',
     averageRating: 'averageRating',
     isAvailable: 'isAvailable',
+    availableFrom: 'availableFrom',
+    availableTo: 'availableTo',
     isDeleted: 'isDeleted',
     deletedAt: 'deletedAt',
-    version: 'version',
     categoryId: 'categoryId',
     userId: 'userId',
     createdAt: 'createdAt',
@@ -10182,20 +10144,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Decimal'
    */
   export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
@@ -10252,6 +10200,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -10302,12 +10264,11 @@ export namespace Prisma {
     NOT?: BookingWhereInput | BookingWhereInput[]
     id?: StringFilter<"Booking"> | string
     date?: DateTimeFilter<"Booking"> | Date | string
-    startTime?: DateTimeNullableFilter<"Booking"> | Date | string | null
-    endTime?: DateTimeNullableFilter<"Booking"> | Date | string | null
+    startTime?: DateTimeFilter<"Booking"> | Date | string
+    endTime?: DateTimeFilter<"Booking"> | Date | string
     status?: EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus
     isDeleted?: BoolFilter<"Booking"> | boolean
     deletedAt?: DateTimeNullableFilter<"Booking"> | Date | string | null
-    version?: IntFilter<"Booking"> | number
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
     tutorId?: StringFilter<"Booking"> | string
@@ -10321,12 +10282,11 @@ export namespace Prisma {
   export type BookingOrderByWithRelationInput = {
     id?: SortOrder
     date?: SortOrder
-    startTime?: SortOrderInput | SortOrder
-    endTime?: SortOrderInput | SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
     status?: SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
-    version?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tutorId?: SortOrder
@@ -10343,12 +10303,11 @@ export namespace Prisma {
     OR?: BookingWhereInput[]
     NOT?: BookingWhereInput | BookingWhereInput[]
     date?: DateTimeFilter<"Booking"> | Date | string
-    startTime?: DateTimeNullableFilter<"Booking"> | Date | string | null
-    endTime?: DateTimeNullableFilter<"Booking"> | Date | string | null
+    startTime?: DateTimeFilter<"Booking"> | Date | string
+    endTime?: DateTimeFilter<"Booking"> | Date | string
     status?: EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus
     isDeleted?: BoolFilter<"Booking"> | boolean
     deletedAt?: DateTimeNullableFilter<"Booking"> | Date | string | null
-    version?: IntFilter<"Booking"> | number
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
     tutorId?: StringFilter<"Booking"> | string
@@ -10362,21 +10321,18 @@ export namespace Prisma {
   export type BookingOrderByWithAggregationInput = {
     id?: SortOrder
     date?: SortOrder
-    startTime?: SortOrderInput | SortOrder
-    endTime?: SortOrderInput | SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
     status?: SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
-    version?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tutorId?: SortOrder
     userId?: SortOrder
     _count?: BookingCountOrderByAggregateInput
-    _avg?: BookingAvgOrderByAggregateInput
     _max?: BookingMaxOrderByAggregateInput
     _min?: BookingMinOrderByAggregateInput
-    _sum?: BookingSumOrderByAggregateInput
   }
 
   export type BookingScalarWhereWithAggregatesInput = {
@@ -10385,12 +10341,11 @@ export namespace Prisma {
     NOT?: BookingScalarWhereWithAggregatesInput | BookingScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Booking"> | string
     date?: DateTimeWithAggregatesFilter<"Booking"> | Date | string
-    startTime?: DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
-    endTime?: DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
+    startTime?: DateTimeWithAggregatesFilter<"Booking"> | Date | string
+    endTime?: DateTimeWithAggregatesFilter<"Booking"> | Date | string
     status?: EnumBookingStatusWithAggregatesFilter<"Booking"> | $Enums.BookingStatus
     isDeleted?: BoolWithAggregatesFilter<"Booking"> | boolean
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
-    version?: IntWithAggregatesFilter<"Booking"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Booking"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Booking"> | Date | string
     tutorId?: StringWithAggregatesFilter<"Booking"> | string
@@ -10726,9 +10681,10 @@ export namespace Prisma {
     experience?: IntFilter<"TutorProfile"> | number
     averageRating?: FloatFilter<"TutorProfile"> | number
     isAvailable?: BoolFilter<"TutorProfile"> | boolean
+    availableFrom?: StringNullableFilter<"TutorProfile"> | string | null
+    availableTo?: StringNullableFilter<"TutorProfile"> | string | null
     isDeleted?: BoolFilter<"TutorProfile"> | boolean
     deletedAt?: DateTimeNullableFilter<"TutorProfile"> | Date | string | null
-    version?: IntFilter<"TutorProfile"> | number
     categoryId?: StringFilter<"TutorProfile"> | string
     userId?: StringFilter<"TutorProfile"> | string
     createdAt?: DateTimeFilter<"TutorProfile"> | Date | string
@@ -10747,9 +10703,10 @@ export namespace Prisma {
     experience?: SortOrder
     averageRating?: SortOrder
     isAvailable?: SortOrder
+    availableFrom?: SortOrderInput | SortOrder
+    availableTo?: SortOrderInput | SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
-    version?: SortOrder
     categoryId?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
@@ -10772,9 +10729,10 @@ export namespace Prisma {
     experience?: IntFilter<"TutorProfile"> | number
     averageRating?: FloatFilter<"TutorProfile"> | number
     isAvailable?: BoolFilter<"TutorProfile"> | boolean
+    availableFrom?: StringNullableFilter<"TutorProfile"> | string | null
+    availableTo?: StringNullableFilter<"TutorProfile"> | string | null
     isDeleted?: BoolFilter<"TutorProfile"> | boolean
     deletedAt?: DateTimeNullableFilter<"TutorProfile"> | Date | string | null
-    version?: IntFilter<"TutorProfile"> | number
     categoryId?: StringFilter<"TutorProfile"> | string
     createdAt?: DateTimeFilter<"TutorProfile"> | Date | string
     updatedAt?: DateTimeFilter<"TutorProfile"> | Date | string
@@ -10792,9 +10750,10 @@ export namespace Prisma {
     experience?: SortOrder
     averageRating?: SortOrder
     isAvailable?: SortOrder
+    availableFrom?: SortOrderInput | SortOrder
+    availableTo?: SortOrderInput | SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
-    version?: SortOrder
     categoryId?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
@@ -10817,9 +10776,10 @@ export namespace Prisma {
     experience?: IntWithAggregatesFilter<"TutorProfile"> | number
     averageRating?: FloatWithAggregatesFilter<"TutorProfile"> | number
     isAvailable?: BoolWithAggregatesFilter<"TutorProfile"> | boolean
+    availableFrom?: StringNullableWithAggregatesFilter<"TutorProfile"> | string | null
+    availableTo?: StringNullableWithAggregatesFilter<"TutorProfile"> | string | null
     isDeleted?: BoolWithAggregatesFilter<"TutorProfile"> | boolean
     deletedAt?: DateTimeNullableWithAggregatesFilter<"TutorProfile"> | Date | string | null
-    version?: IntWithAggregatesFilter<"TutorProfile"> | number
     categoryId?: StringWithAggregatesFilter<"TutorProfile"> | string
     userId?: StringWithAggregatesFilter<"TutorProfile"> | string
     createdAt?: DateTimeWithAggregatesFilter<"TutorProfile"> | Date | string
@@ -10936,12 +10896,11 @@ export namespace Prisma {
   export type BookingCreateInput = {
     id?: string
     date: Date | string
-    startTime?: Date | string | null
-    endTime?: Date | string | null
+    startTime: Date | string
+    endTime: Date | string
     status?: $Enums.BookingStatus
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     tutor: TutorProfileCreateNestedOneWithoutBookingInput
@@ -10953,12 +10912,11 @@ export namespace Prisma {
   export type BookingUncheckedCreateInput = {
     id?: string
     date: Date | string
-    startTime?: Date | string | null
-    endTime?: Date | string | null
+    startTime: Date | string
+    endTime: Date | string
     status?: $Enums.BookingStatus
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     tutorId: string
@@ -10970,12 +10928,11 @@ export namespace Prisma {
   export type BookingUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutor?: TutorProfileUpdateOneRequiredWithoutBookingNestedInput
@@ -10987,12 +10944,11 @@ export namespace Prisma {
   export type BookingUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutorId?: StringFieldUpdateOperationsInput | string
@@ -11004,12 +10960,11 @@ export namespace Prisma {
   export type BookingCreateManyInput = {
     id?: string
     date: Date | string
-    startTime?: Date | string | null
-    endTime?: Date | string | null
+    startTime: Date | string
+    endTime: Date | string
     status?: $Enums.BookingStatus
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     tutorId: string
@@ -11019,12 +10974,11 @@ export namespace Prisma {
   export type BookingUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11032,12 +10986,11 @@ export namespace Prisma {
   export type BookingUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutorId?: StringFieldUpdateOperationsInput | string
@@ -11393,9 +11346,10 @@ export namespace Prisma {
     experience: number
     averageRating?: number
     isAvailable?: boolean
+    availableFrom?: string | null
+    availableTo?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     category: CategoryCreateNestedOneWithoutTutorInput
@@ -11412,9 +11366,10 @@ export namespace Prisma {
     experience: number
     averageRating?: number
     isAvailable?: boolean
+    availableFrom?: string | null
+    availableTo?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     categoryId: string
     userId: string
     createdAt?: Date | string
@@ -11431,9 +11386,10 @@ export namespace Prisma {
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    availableFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    availableTo?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneRequiredWithoutTutorNestedInput
@@ -11450,9 +11406,10 @@ export namespace Prisma {
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    availableFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    availableTo?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     categoryId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11469,9 +11426,10 @@ export namespace Prisma {
     experience: number
     averageRating?: number
     isAvailable?: boolean
+    availableFrom?: string | null
+    availableTo?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     categoryId: string
     userId: string
     createdAt?: Date | string
@@ -11486,9 +11444,10 @@ export namespace Prisma {
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    availableFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    availableTo?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11501,9 +11460,10 @@ export namespace Prisma {
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    availableFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    availableTo?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     categoryId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11668,17 +11628,6 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type EnumBookingStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.BookingStatus | EnumBookingStatusFieldRefInput<$PrismaModel>
     in?: $Enums.BookingStatus[] | ListEnumBookingStatusFieldRefInput<$PrismaModel>
@@ -11691,15 +11640,15 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type TutorProfileScalarRelationFilter = {
@@ -11735,15 +11684,10 @@ export namespace Prisma {
     status?: SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrder
-    version?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tutorId?: SortOrder
     userId?: SortOrder
-  }
-
-  export type BookingAvgOrderByAggregateInput = {
-    version?: SortOrder
   }
 
   export type BookingMaxOrderByAggregateInput = {
@@ -11754,7 +11698,6 @@ export namespace Prisma {
     status?: SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrder
-    version?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tutorId?: SortOrder
@@ -11769,15 +11712,10 @@ export namespace Prisma {
     status?: SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrder
-    version?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tutorId?: SortOrder
     userId?: SortOrder
-  }
-
-  export type BookingSumOrderByAggregateInput = {
-    version?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -11812,20 +11750,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
   export type EnumBookingStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.BookingStatus | EnumBookingStatusFieldRefInput<$PrismaModel>
     in?: $Enums.BookingStatus[] | ListEnumBookingStatusFieldRefInput<$PrismaModel>
@@ -11844,20 +11768,18 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
@@ -12096,6 +12018,17 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type ReviewCountOrderByAggregateInput = {
     id?: SortOrder
     rating?: SortOrder
@@ -12135,6 +12068,22 @@ export namespace Prisma {
 
   export type ReviewSumOrderByAggregateInput = {
     rating?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type StudentProfileCountOrderByAggregateInput = {
@@ -12223,9 +12172,10 @@ export namespace Prisma {
     experience?: SortOrder
     averageRating?: SortOrder
     isAvailable?: SortOrder
+    availableFrom?: SortOrder
+    availableTo?: SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrder
-    version?: SortOrder
     categoryId?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
@@ -12236,7 +12186,6 @@ export namespace Prisma {
     hourlyRate?: SortOrder
     experience?: SortOrder
     averageRating?: SortOrder
-    version?: SortOrder
   }
 
   export type TutorProfileMaxOrderByAggregateInput = {
@@ -12247,9 +12196,10 @@ export namespace Prisma {
     experience?: SortOrder
     averageRating?: SortOrder
     isAvailable?: SortOrder
+    availableFrom?: SortOrder
+    availableTo?: SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrder
-    version?: SortOrder
     categoryId?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
@@ -12264,9 +12214,10 @@ export namespace Prisma {
     experience?: SortOrder
     averageRating?: SortOrder
     isAvailable?: SortOrder
+    availableFrom?: SortOrder
+    availableTo?: SortOrder
     isDeleted?: SortOrder
     deletedAt?: SortOrder
-    version?: SortOrder
     categoryId?: SortOrder
     userId?: SortOrder
     createdAt?: SortOrder
@@ -12277,7 +12228,6 @@ export namespace Prisma {
     hourlyRate?: SortOrder
     experience?: SortOrder
     averageRating?: SortOrder
-    version?: SortOrder
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -12442,10 +12392,6 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
   export type EnumBookingStatusFieldUpdateOperationsInput = {
     set?: $Enums.BookingStatus
   }
@@ -12454,12 +12400,8 @@ export namespace Prisma {
     set?: boolean
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type TutorProfileUpdateOneRequiredWithoutBookingNestedInput = {
@@ -12624,6 +12566,14 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutReviewInput, UserUncheckedCreateWithoutReviewInput>
     connectOrCreate?: UserCreateOrConnectWithoutReviewInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type BookingUpdateOneRequiredWithoutReviewNestedInput = {
@@ -13007,17 +12957,6 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedEnumBookingStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.BookingStatus | EnumBookingStatusFieldRefInput<$PrismaModel>
     in?: $Enums.BookingStatus[] | ListEnumBookingStatusFieldRefInput<$PrismaModel>
@@ -13030,15 +12969,15 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -13058,6 +12997,17 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -13070,6 +13020,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBookingStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BookingStatus | EnumBookingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BookingStatus[] | ListEnumBookingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BookingStatus[] | ListEnumBookingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBookingStatusWithAggregatesFilter<$PrismaModel> | $Enums.BookingStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBookingStatusFilter<$PrismaModel>
+    _max?: NestedEnumBookingStatusFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -13095,51 +13063,6 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedEnumBookingStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.BookingStatus | EnumBookingStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.BookingStatus[] | ListEnumBookingStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.BookingStatus[] | ListEnumBookingStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumBookingStatusWithAggregatesFilter<$PrismaModel> | $Enums.BookingStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumBookingStatusFilter<$PrismaModel>
-    _max?: NestedEnumBookingStatusFilter<$PrismaModel>
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
@@ -13257,6 +13180,33 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -13315,9 +13265,10 @@ export namespace Prisma {
     experience: number
     averageRating?: number
     isAvailable?: boolean
+    availableFrom?: string | null
+    availableTo?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     category: CategoryCreateNestedOneWithoutTutorInput
@@ -13333,9 +13284,10 @@ export namespace Prisma {
     experience: number
     averageRating?: number
     isAvailable?: boolean
+    availableFrom?: string | null
+    availableTo?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     categoryId: string
     userId: string
     createdAt?: Date | string
@@ -13472,9 +13424,10 @@ export namespace Prisma {
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    availableFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    availableTo?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneRequiredWithoutTutorNestedInput
@@ -13490,9 +13443,10 @@ export namespace Prisma {
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    availableFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    availableTo?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     categoryId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13631,9 +13585,10 @@ export namespace Prisma {
     experience: number
     averageRating?: number
     isAvailable?: boolean
+    availableFrom?: string | null
+    availableTo?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutTutorInput
@@ -13649,9 +13604,10 @@ export namespace Prisma {
     experience: number
     averageRating?: number
     isAvailable?: boolean
+    availableFrom?: string | null
+    availableTo?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13696,9 +13652,10 @@ export namespace Prisma {
     experience?: IntFilter<"TutorProfile"> | number
     averageRating?: FloatFilter<"TutorProfile"> | number
     isAvailable?: BoolFilter<"TutorProfile"> | boolean
+    availableFrom?: StringNullableFilter<"TutorProfile"> | string | null
+    availableTo?: StringNullableFilter<"TutorProfile"> | string | null
     isDeleted?: BoolFilter<"TutorProfile"> | boolean
     deletedAt?: DateTimeNullableFilter<"TutorProfile"> | Date | string | null
-    version?: IntFilter<"TutorProfile"> | number
     categoryId?: StringFilter<"TutorProfile"> | string
     userId?: StringFilter<"TutorProfile"> | string
     createdAt?: DateTimeFilter<"TutorProfile"> | Date | string
@@ -13708,12 +13665,11 @@ export namespace Prisma {
   export type BookingCreateWithoutPaymentInput = {
     id?: string
     date: Date | string
-    startTime?: Date | string | null
-    endTime?: Date | string | null
+    startTime: Date | string
+    endTime: Date | string
     status?: $Enums.BookingStatus
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     tutor: TutorProfileCreateNestedOneWithoutBookingInput
@@ -13724,12 +13680,11 @@ export namespace Prisma {
   export type BookingUncheckedCreateWithoutPaymentInput = {
     id?: string
     date: Date | string
-    startTime?: Date | string | null
-    endTime?: Date | string | null
+    startTime: Date | string
+    endTime: Date | string
     status?: $Enums.BookingStatus
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     tutorId: string
@@ -13801,12 +13756,11 @@ export namespace Prisma {
   export type BookingUpdateWithoutPaymentInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutor?: TutorProfileUpdateOneRequiredWithoutBookingNestedInput
@@ -13817,12 +13771,11 @@ export namespace Prisma {
   export type BookingUncheckedUpdateWithoutPaymentInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutorId?: StringFieldUpdateOperationsInput | string
@@ -13884,12 +13837,11 @@ export namespace Prisma {
   export type BookingCreateWithoutReviewInput = {
     id?: string
     date: Date | string
-    startTime?: Date | string | null
-    endTime?: Date | string | null
+    startTime: Date | string
+    endTime: Date | string
     status?: $Enums.BookingStatus
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     tutor: TutorProfileCreateNestedOneWithoutBookingInput
@@ -13900,12 +13852,11 @@ export namespace Prisma {
   export type BookingUncheckedCreateWithoutReviewInput = {
     id?: string
     date: Date | string
-    startTime?: Date | string | null
-    endTime?: Date | string | null
+    startTime: Date | string
+    endTime: Date | string
     status?: $Enums.BookingStatus
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     tutorId: string
@@ -13926,9 +13877,10 @@ export namespace Prisma {
     experience: number
     averageRating?: number
     isAvailable?: boolean
+    availableFrom?: string | null
+    availableTo?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     category: CategoryCreateNestedOneWithoutTutorInput
@@ -13944,9 +13896,10 @@ export namespace Prisma {
     experience: number
     averageRating?: number
     isAvailable?: boolean
+    availableFrom?: string | null
+    availableTo?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     categoryId: string
     userId: string
     createdAt?: Date | string
@@ -14018,12 +13971,11 @@ export namespace Prisma {
   export type BookingUpdateWithoutReviewInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutor?: TutorProfileUpdateOneRequiredWithoutBookingNestedInput
@@ -14034,12 +13986,11 @@ export namespace Prisma {
   export type BookingUncheckedUpdateWithoutReviewInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutorId?: StringFieldUpdateOperationsInput | string
@@ -14066,9 +14017,10 @@ export namespace Prisma {
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    availableFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    availableTo?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneRequiredWithoutTutorNestedInput
@@ -14084,9 +14036,10 @@ export namespace Prisma {
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    availableFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    availableTo?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     categoryId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14310,12 +14263,11 @@ export namespace Prisma {
   export type BookingCreateWithoutTutorInput = {
     id?: string
     date: Date | string
-    startTime?: Date | string | null
-    endTime?: Date | string | null
+    startTime: Date | string
+    endTime: Date | string
     status?: $Enums.BookingStatus
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutBookingInput
@@ -14326,12 +14278,11 @@ export namespace Prisma {
   export type BookingUncheckedCreateWithoutTutorInput = {
     id?: string
     date: Date | string
-    startTime?: Date | string | null
-    endTime?: Date | string | null
+    startTime: Date | string
+    endTime: Date | string
     status?: $Enums.BookingStatus
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -14479,12 +14430,11 @@ export namespace Prisma {
     NOT?: BookingScalarWhereInput | BookingScalarWhereInput[]
     id?: StringFilter<"Booking"> | string
     date?: DateTimeFilter<"Booking"> | Date | string
-    startTime?: DateTimeNullableFilter<"Booking"> | Date | string | null
-    endTime?: DateTimeNullableFilter<"Booking"> | Date | string | null
+    startTime?: DateTimeFilter<"Booking"> | Date | string
+    endTime?: DateTimeFilter<"Booking"> | Date | string
     status?: EnumBookingStatusFilter<"Booking"> | $Enums.BookingStatus
     isDeleted?: BoolFilter<"Booking"> | boolean
     deletedAt?: DateTimeNullableFilter<"Booking"> | Date | string | null
-    version?: IntFilter<"Booking"> | number
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
     tutorId?: StringFilter<"Booking"> | string
@@ -14529,9 +14479,10 @@ export namespace Prisma {
     experience: number
     averageRating?: number
     isAvailable?: boolean
+    availableFrom?: string | null
+    availableTo?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     category: CategoryCreateNestedOneWithoutTutorInput
@@ -14547,9 +14498,10 @@ export namespace Prisma {
     experience: number
     averageRating?: number
     isAvailable?: boolean
+    availableFrom?: string | null
+    availableTo?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     categoryId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14596,12 +14548,11 @@ export namespace Prisma {
   export type BookingCreateWithoutUserInput = {
     id?: string
     date: Date | string
-    startTime?: Date | string | null
-    endTime?: Date | string | null
+    startTime: Date | string
+    endTime: Date | string
     status?: $Enums.BookingStatus
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     tutor: TutorProfileCreateNestedOneWithoutBookingInput
@@ -14612,12 +14563,11 @@ export namespace Prisma {
   export type BookingUncheckedCreateWithoutUserInput = {
     id?: string
     date: Date | string
-    startTime?: Date | string | null
-    endTime?: Date | string | null
+    startTime: Date | string
+    endTime: Date | string
     status?: $Enums.BookingStatus
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     tutorId: string
@@ -14724,9 +14674,10 @@ export namespace Prisma {
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    availableFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    availableTo?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneRequiredWithoutTutorNestedInput
@@ -14742,9 +14693,10 @@ export namespace Prisma {
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    availableFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    availableTo?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     categoryId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14864,9 +14816,10 @@ export namespace Prisma {
     experience: number
     averageRating?: number
     isAvailable?: boolean
+    availableFrom?: string | null
+    availableTo?: string | null
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14880,9 +14833,10 @@ export namespace Prisma {
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    availableFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    availableTo?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTutorNestedInput
@@ -14898,9 +14852,10 @@ export namespace Prisma {
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    availableFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    availableTo?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14916,9 +14871,10 @@ export namespace Prisma {
     experience?: IntFieldUpdateOperationsInput | number
     averageRating?: FloatFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    availableFrom?: NullableStringFieldUpdateOperationsInput | string | null
+    availableTo?: NullableStringFieldUpdateOperationsInput | string | null
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14927,12 +14883,11 @@ export namespace Prisma {
   export type BookingCreateManyTutorInput = {
     id?: string
     date: Date | string
-    startTime?: Date | string | null
-    endTime?: Date | string | null
+    startTime: Date | string
+    endTime: Date | string
     status?: $Enums.BookingStatus
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -14951,12 +14906,11 @@ export namespace Prisma {
   export type BookingUpdateWithoutTutorInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutBookingNestedInput
@@ -14967,12 +14921,11 @@ export namespace Prisma {
   export type BookingUncheckedUpdateWithoutTutorInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -14983,12 +14936,11 @@ export namespace Prisma {
   export type BookingUncheckedUpdateManyWithoutTutorInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -15027,12 +14979,11 @@ export namespace Prisma {
   export type BookingCreateManyUserInput = {
     id?: string
     date: Date | string
-    startTime?: Date | string | null
-    endTime?: Date | string | null
+    startTime: Date | string
+    endTime: Date | string
     status?: $Enums.BookingStatus
     isDeleted?: boolean
     deletedAt?: Date | string | null
-    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     tutorId: string
@@ -15066,12 +15017,11 @@ export namespace Prisma {
   export type BookingUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutor?: TutorProfileUpdateOneRequiredWithoutBookingNestedInput
@@ -15082,12 +15032,11 @@ export namespace Prisma {
   export type BookingUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutorId?: StringFieldUpdateOperationsInput | string
@@ -15098,12 +15047,11 @@ export namespace Prisma {
   export type BookingUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tutorId?: StringFieldUpdateOperationsInput | string

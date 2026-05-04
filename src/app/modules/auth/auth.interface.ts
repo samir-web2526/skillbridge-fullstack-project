@@ -15,6 +15,8 @@ export type IRegisterPayload = {
     hourlyRate?: number;
     experience?: number;
     categoryId?: string;
+    availableFrom?: string;
+    availableTo?: string;
     // Student profile fields
     gender?: string;
     dateOfBirth?: string;

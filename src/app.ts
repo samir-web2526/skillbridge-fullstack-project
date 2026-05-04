@@ -5,7 +5,7 @@ import { IndexRoutes } from "./app/routes";
 import { notFound } from "./app/middlewares/notFound";
 import { globalErrorHandler } from "./app/middlewares/globalErrorHandler";
 
-const app:Application = express();
+const app: Application = express();
 
 const allowedOrigins = [
   process.env.FRONTEND_URL || "http://localhost:3000",
@@ -38,6 +38,7 @@ app.use(
 
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", IndexRoutes);
 

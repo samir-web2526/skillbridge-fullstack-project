@@ -17,6 +17,8 @@ const registerValidationSchema = z.object({
     address: z.string().optional(),
     class: z.string().optional(),
     group: z.string().optional(),
+    availableFrom: z.string().optional(),
+    availableTo: z.string().optional(),
   }),
 });
 

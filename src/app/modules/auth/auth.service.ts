@@ -2,15 +2,18 @@ import bcrypt from 'bcrypt';
 import { prisma } from '../../../lib/prisma';
 import { envVars } from '../../../config/env';
 import { jwtUtils } from '../../utils/jwt';
-import { Secret } from 'jsonwebtoken';
 import { ILoginPayload, IRegisterPayload } from './auth.interface';
 import AppError from '../../errorHelpers/AppError';
 import status from 'http-status';
 import { Role, UserStatus, Prisma } from '../../../generated';
+import { isValidWorkingTime } from '../booking/booking.utils';
 
 const register = async (payload: IRegisterPayload) => {
-    const { email, password, name, phone, image, role, bio, hourlyRate, experience, categoryId, gender, dateOfBirth, address, class: studentClass, group: studentGroup } = payload;
+    const { email, password, name, phone, image, role, bio, hourlyRate, experience, categoryId, gender, dateOfBirth, address, class: studentClass, group: studentGroup, availableFrom, availableTo } = payload;
 
+    console.log("FULL RAW PAYLOAD:", payload);
+    console.log("AVAILABLE FROM:", payload.availableFrom);
+    console.log("AVAILABLE TO:", payload.availableTo);
     const isUserExists = await prisma.user.findUnique({
         where: { email },
     });
@@ -36,7 +39,20 @@ const register = async (payload: IRegisterPayload) => {
 
         if (role === Role.TUTOR) {
             if (!hourlyRate || !experience || !categoryId) {
-                throw new AppError(status.BAD_REQUEST, 'Tutor profile information is missing');
+                throw new AppError(status.BAD_REQUEST, "Tutor profile information is missing");
+            }
+            if (!availableFrom || !availableTo) {
+                throw new AppError(
+                    status.BAD_REQUEST,
+                    "Working hours are required for tutor"
+                );
+            }
+
+            if (!isValidWorkingTime(availableFrom, availableTo)) {
+                throw new AppError(
+                    status.BAD_REQUEST,
+                    "Working hours must be between 06:00 - 23:00"
+                );
             }
 
             await tx.tutorProfile.create({
@@ -47,6 +63,8 @@ const register = async (payload: IRegisterPayload) => {
                     hourlyRate: new Prisma.Decimal(hourlyRate),
                     experience,
                     categoryId,
+                    availableFrom: availableFrom,
+                    availableTo: availableTo
                 },
             });
         }

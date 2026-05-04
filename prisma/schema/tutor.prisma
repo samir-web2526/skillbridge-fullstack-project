@@ -5,19 +5,27 @@ model TutorProfile {
   hourlyRate    Decimal   @db.Decimal(10, 2)
   experience    Int
   averageRating Float     @default(0)
+
   isAvailable   Boolean   @default(true)
+
+  availableFrom String?
+  availableTo   String?
+
   isDeleted     Boolean   @default(false)
   deletedAt     DateTime?
-  version       Int       @default(0)
+
   categoryId    String
   userId        String    @unique
+
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
   category      Category  @relation(fields: [categoryId], references: [id])
   user          User      @relation(fields: [userId], references: [id])
+
   booking       Booking[] @relation("TutorBookings")
   review        Review[]
 
-  @@index([categoryId, userId])
+  @@index([categoryId, isDeleted])
   @@map("tutor_profile")
 }

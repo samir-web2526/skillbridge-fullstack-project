@@ -7,6 +7,10 @@ import { tokenUtils } from '../../utils/token';
 
 const register = catchAsync(async (req: Request, res: Response) => {
     const result = await AuthService.register(req.body);
+    console.log("BODY:", req.body);
+    console.log("FROM:", req.body.availableFrom);
+    console.log("TO:", req.body.availableTo);
+
     sendResponse(res, {
         statusCode: Number(status.CREATED),
         success: true,
