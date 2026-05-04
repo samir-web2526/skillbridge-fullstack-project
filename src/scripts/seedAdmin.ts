@@ -1,47 +1,45 @@
 import { prisma } from "../lib/prisma";
-import { userRole } from "../middlewares/auth";
+import { userRole } from "../app/middlewares/auth";
+import bcrypt from "bcrypt";
+import { envVars } from "../config/env";
 
 async function seedAdmin() {
   try {
-    const adminName = process.env.ADMIN_NAME;
-    const adminEmail = process.env.ADMIN_EMAIL;
-    const adminPass = process.env.ADMIN_PASS;
+    const adminName = envVars.ADMIN_NAME;
+    const adminEmail = envVars.ADMIN_EMAIL;
+    const adminPass = envVars.ADMIN_PASSWORD;
 
-    if (!adminEmail) {
-      throw new Error("Admin email not set in .env");
+    if (!adminEmail || !adminPass || !adminName) {
+      throw new Error("Admin credentials not set in .env");
     }
-
-    const adminData = {
-      name: adminName,
-      email: adminEmail,
-      role: userRole.ADMIN,
-      password: adminPass,
-    };
 
     const exitingUser = await prisma.user.findUnique({
       where: {
-        email: adminData.email,
+        email: adminEmail,
       },
     });
 
     if (exitingUser) {
-      throw new Error("Admin already exists");
+      console.log("Admin already exists");
+      return;
     }
 
-    const signUpAdmin = await fetch(
-      "http://localhost:5000/api/auth/sign-up/email",
-      {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          Origin: "http://localhost:3000",
-        },
-        body: JSON.stringify(adminData),
-      },
-    );
+    const hashedPassword = await bcrypt.hash(adminPass, Number(envVars.BCRYPT_SALT_ROUNDS || 12));
+
+    await prisma.user.create({
+        data: {
+            name: adminName,
+            email: adminEmail,
+            password: hashedPassword,
+            role: userRole.ADMIN,
+        }
+    });
+
     console.log("Admin created successfully");
   } catch (error) {
     console.error(error);
+  } finally {
+    await prisma.$disconnect();
   }
 }
 

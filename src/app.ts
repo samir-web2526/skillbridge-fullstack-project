@@ -1,15 +1,14 @@
 import express, { Application } from "express";
-import { toNodeHandler } from "better-auth/node";
-import { auth } from "./lib/auth";
 import cors from "cors";
-import { bookingRouter } from "./modules/booking/booking.router";
-import { categoryRouter } from "./modules/category/category.router";
-import { tutorRouter } from "./modules/tutor/tutor.router";
-import { reviewRouter } from "./modules/review/review.router";
+import cookieParser from "cookie-parser";
+import { IndexRoutes } from "./app/routes";
+import { notFound } from "./app/middlewares/notFound";
+import { globalErrorHandler } from "./app/middlewares/globalErrorHandler";
+
 const app:Application = express();
 
 const allowedOrigins = [
-  process.env.APP_URL || "http://localhost:3000",
+  process.env.FRONTEND_URL || "http://localhost:3000",
 ].filter(Boolean); // Remove undefined values
 
 app.use(
@@ -37,15 +36,17 @@ app.use(
   }),
 );
 
+app.use(cookieParser());
 app.use(express.json());
 
-app.all("/api/auth/*splat", toNodeHandler(auth));
-app.use("/api/tutors", tutorRouter);
-app.use("/api/bookings", bookingRouter);
-app.use("/api/categories", categoryRouter);
-app.use("/api/reviews", reviewRouter);
+app.use("/api", IndexRoutes);
+
 app.get("/", (req, res) => {
   res.send("Hello Skill Bridge Backend!!!");
 });
+
+// Global Error & NotFound handlers
+app.use(notFound);
+app.use(globalErrorHandler);
 
 export default app;
