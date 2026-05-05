@@ -3,20 +3,35 @@ import catchAsync from "../../sharedfile/catchAsync";
 import sendResponse from "../../sharedfile/sendResponse";
 import status from "http-status";
 import { bookingService } from "./booking.service";
+import { PaymentService } from "../payment/payment.service";
 import { paginationHelper } from "../../sharedfile/paginationHelper";
 
 const createBooking = catchAsync(async (req: Request, res: Response) => {
     const user = req.user;
-    const result = await bookingService.createBooking(
+    const booking = await bookingService.createBooking(
         req.body,
         user?.id as string,
     );
-    sendResponse(res, {
-        statusCode: Number(status.CREATED),
-        success: true,
-        message: "Booking Created Successfully",
-        data: result,
-    });
+
+    try {
+        const paymentResult = await PaymentService.initializePayment(
+            booking.id,
+            user?.id as string,
+        );
+
+        sendResponse(res, {
+            statusCode: Number(status.CREATED),
+            success: true,
+            message: "Booking created and payment initialized successfully.",
+            data: {
+                booking,
+                payment: paymentResult,
+            },
+        });
+    } catch (error) {
+        await bookingService.deletePendingBooking(booking.id);
+        throw error;
+    }
 });
 
 const getBooking = catchAsync(async (req: Request, res: Response) => {

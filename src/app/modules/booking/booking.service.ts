@@ -116,7 +116,7 @@ if (tutorUser.status === "PENDING") {
       date: bookingDate,
       startTime: startDateTime,
       endTime: endDateTime,
-      status: "PENDING",
+      status: BookingStatus.PENDING,
     },
   });
 };
@@ -265,10 +265,17 @@ const cancelBooking = async (userId: string, bookingId: string) => {
   return result;
 };
 
+const deletePendingBooking = async (bookingId: string) => {
+  await prisma.booking.delete({
+    where: { id: bookingId },
+  });
+};
+
 export const bookingService = {
   createBooking,
   getBooking,
   getBookingById,
   updateBooking,
   cancelBooking,
+  deletePendingBooking,
 };

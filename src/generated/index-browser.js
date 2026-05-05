@@ -148,6 +148,8 @@ exports.Prisma.PaymentScalarFieldEnum = {
   currency: 'currency',
   status: 'status',
   transactionId: 'transactionId',
+  stripeSessionId: 'stripeSessionId',
+  paidAt: 'paidAt',
   paymentGateway: 'paymentGateway',
   paymentMethod: 'paymentMethod',
   gatewayResponse: 'gatewayResponse',

@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { IndexRoutes } from "./app/routes";
 import { notFound } from "./app/middlewares/notFound";
 import { globalErrorHandler } from "./app/middlewares/globalErrorHandler";
+import { PaymentController } from "./app/modules/payment/payment.controller";
 
 const app: Application = express();
 
@@ -37,10 +38,13 @@ app.use(
 );
 
 app.use(cookieParser());
+app.use('/api/payment/webhook/stripe', express.raw({ type: 'application/json' }), PaymentController.handleStripeWebhook);
+app.use('/api/payments/webhook/stripe', express.raw({ type: 'application/json' }), PaymentController.handleStripeWebhook);
+app.use('/api/v1/payments/webhook/stripe', express.raw({ type: 'application/json' }), PaymentController.handleStripeWebhook);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api", IndexRoutes);
+app.use("/api/v1", IndexRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello Skill Bridge Backend!!!");

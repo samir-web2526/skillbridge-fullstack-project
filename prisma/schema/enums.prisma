@@ -21,8 +21,7 @@ enum UserStatus {
 enum PaymentStatus {
   PENDING
   PAID
-  FAILED
-  REFUNDED
+  UNPAID
 }
 
 enum PaymentMethod {

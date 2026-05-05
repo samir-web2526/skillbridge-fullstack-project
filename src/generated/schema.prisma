@@ -78,6 +78,8 @@ model Payment {
   currency        String         @default("BDT")
   status          PaymentStatus  @default(PENDING)
   transactionId   String         @unique
+  stripeSessionId String?        @unique
+  paidAt          DateTime?
   paymentGateway  String?
   paymentMethod   PaymentMethod?
   gatewayResponse Json?
